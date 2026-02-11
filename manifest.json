@@ -1,0 +1,21 @@
+{
+  "dog": {
+    "name": "우리 강아지",
+    "birth": "2016-02-14"
+  },
+  "party": {
+    "title": "강아지 생일 파티",
+    "date": "2026-02-14",
+    "time": "14:00",
+    "location": "장소를 여기에 입력",
+    "note": "간단 안내 문구를 여기에 입력"
+  },
+  "images": [
+    "image/01.jpg",
+    "image/02.jpg"
+  ],
+  "videos": [
+    "video/01.mp4",
+    "video/02.mp4"
+  ]
+}

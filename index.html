@@ -6,13 +6,9 @@
   <title>연유 생일파티 방명록</title>
   <style>
     :root{
-      --bg:#0b0f17;
-      --panel:#121a2a;
-      --line:rgba(255,255,255,.12);
-      --txt:#eaf0ff;
-      --muted:rgba(234,240,255,.72);
-      --accent:#6ee7ff;
-      --accent2:#a78bfa;
+      --bg:#0b0f17; --panel:#121a2a; --line:rgba(255,255,255,.12);
+      --txt:#eaf0ff; --muted:rgba(234,240,255,.72);
+      --accent:#6ee7ff; --accent2:#a78bfa;
     }
     html,body{height:100%}
     body{
@@ -23,11 +19,10 @@
                   var(--bg);
       color:var(--txt);
     }
-    a{color:inherit}
     .wrap{max-width:1080px;margin:0 auto;padding:20px}
     .top{
       display:flex;gap:14px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;
-      padding:18px 18px;border:1px solid var(--line);border-radius:18px;
+      padding:18px;border:1px solid var(--line);border-radius:18px;
       background: linear-gradient(180deg, rgba(18,26,42,.86), rgba(18,26,42,.60));
       box-shadow: 0 18px 60px rgba(0,0,0,.35);
     }
@@ -38,13 +33,14 @@
       padding:7px 10px;border-radius:999px;border:1px solid var(--line);
       background:rgba(0,0,0,.18);color:var(--muted);font-size:12px
     }
-    .grid{
-      margin-top:14px;
-      display:grid;grid-template-columns: 1.4fr .6fr;gap:14px;
+    .btn2{
+      appearance:none;border:1px solid var(--line);cursor:pointer;
+      padding:9px 12px;border-radius:12px;
+      background:rgba(0,0,0,.18);color:var(--txt);font-weight:600;
+      text-decoration:none;display:inline-flex;align-items:center;justify-content:center
     }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-    }
+    .grid{margin-top:14px;display:grid;grid-template-columns: 1.4fr .6fr;gap:14px}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
     .card{
       border:1px solid var(--line);border-radius:18px;
       background: linear-gradient(180deg, rgba(18,26,42,.78), rgba(18,26,42,.52));
@@ -57,12 +53,14 @@
     }
     .card .hd .h{font-weight:700}
     .card .bd{padding:14px 16px}
-    .gallery{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.18);color:var(--muted);font-size:12px
     }
-    @media (max-width: 680px){
-      .gallery{grid-template-columns:repeat(2,1fr)}
-    }
+    .msg{font-size:13px;color:var(--muted)}
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    @media (max-width: 680px){ .gallery{grid-template-columns:repeat(2,1fr)} }
     .ph{
       position:relative;aspect-ratio: 4/3;
       border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.10);
@@ -82,11 +80,6 @@
       background: linear-gradient(90deg, var(--accent), var(--accent2));
     }
     .btn:disabled{opacity:.55;cursor:not-allowed}
-    .btn2{
-      appearance:none;border:1px solid var(--line);cursor:pointer;
-      padding:9px 12px;border-radius:12px;
-      background:rgba(0,0,0,.18);color:var(--txt);font-weight:600;
-    }
     .row{display:flex;gap:10px;flex-wrap:wrap}
     .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
     .field label{font-size:12px;color:var(--muted)}
@@ -100,16 +93,16 @@
       outline:none;
     }
     textarea{min-height:90px;resize:vertical}
-    .msg{font-size:13px;color:var(--muted)}
     .list{display:flex;flex-direction:column;gap:10px}
     .item{
       border:1px solid rgba(255,255,255,.12);
-      border-radius:14px;padding:12px 12px;background:rgba(0,0,0,.18);
+      border-radius:14px;padding:12px;background:rgba(0,0,0,.18);
     }
     .item .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
     .item .name{font-weight:800}
     .item .ts{color:var(--muted);font-size:12px}
     .item .txt{margin-top:8px;white-space:pre-wrap;line-height:1.45}
+    .warn{color:#ffd29b}
     .modal{
       position:fixed;inset:0;background:rgba(0,0,0,.75);
       display:none;align-items:center;justify-content:center;z-index:50;
@@ -129,15 +122,7 @@
     }
     .modal .bar .t{font-weight:800}
     .modal .bar .x{border:none;background:transparent;color:var(--txt);font-size:22px;cursor:pointer}
-    .modal .content{padding:0}
     .modal img{width:100%;height:auto;display:block}
-    .footnote{margin-top:10px;color:var(--muted);font-size:12px}
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(0,0,0,.18);color:var(--muted);font-size:12px
-    }
-    .warn{color:#ffd29b}
   </style>
 </head>
 <body>
@@ -145,9 +130,7 @@
     <div class="top">
       <div class="title">
         <h1>연유 생일파티 방명록</h1>
-        <div class="sub">
-          탄생: 2016-02-14 · 축하 메시지를 남기고, 참여 여부도 알려주세요
-        </div>
+        <div class="sub">탄생: 2016-02-14 · 축하 메시지를 남기고, 참여 여부도 알려주세요</div>
       </div>
       <div class="row">
         <span class="pill" id="apiPill">API: 연결 확인 중</span>
@@ -162,17 +145,15 @@
           <div class="badge" id="galleryInfo">이미지 로딩 중</div>
         </div>
         <div class="bd">
-          <div class="msg">현재 저장소 루트에 업로드된 이미지도 자동 인식하도록 구성되어 있습니다.</div>
+          <div class="msg">현재 저장소 구조(루트 또는 /image 폴더)에 맞춰 자동으로 로딩합니다.</div>
           <div style="height:10px"></div>
           <div class="gallery" id="gallery"></div>
-          <div class="footnote" id="galleryNote"></div>
+          <div class="msg warn" id="galleryNote"></div>
         </div>
       </section>
 
       <aside class="card">
-        <div class="hd">
-          <div class="h">파티 참여 신청</div>
-        </div>
+        <div class="hd"><div class="h">파티 참여 신청</div></div>
         <div class="bd">
           <div class="field">
             <label>이름</label>
@@ -194,16 +175,14 @@
           <div class="row">
             <button class="btn" id="btnJoin" type="button">신청 저장</button>
           </div>
-          <div class="footnote warn" id="joinMsg"></div>
+          <div class="msg warn" id="joinMsg"></div>
         </div>
       </aside>
 
       <section class="card" style="grid-column: 1 / -1;">
         <div class="hd">
           <div class="h">방명록</div>
-          <div class="row">
-            <button class="btn2" id="btnReload" type="button">새로고침</button>
-          </div>
+          <div class="row"><button class="btn2" id="btnReload" type="button">새로고침</button></div>
         </div>
         <div class="bd">
           <div class="field">
@@ -217,7 +196,7 @@
           <div class="row">
             <button class="btn" id="btnPost" type="button">등록</button>
           </div>
-          <div class="footnote warn" id="postMsg"></div>
+          <div class="msg warn" id="postMsg"></div>
 
           <div style="height:12px"></div>
           <div class="list" id="list"></div>
@@ -232,17 +211,13 @@
         <div class="t" id="modalTitle">사진</div>
         <button class="x" id="modalClose" aria-label="닫기">×</button>
       </div>
-      <div class="content">
-        <img id="modalImg" alt="preview" />
-      </div>
+      <img id="modalImg" alt="preview" />
     </div>
   </div>
 
   <script>
-    // ===== 설정: Render 백엔드 =====
     const API_BASE_URL = "https://dog-birthday-api.onrender.com";
 
-    // ===== 현재 업로드 상태(루트에 이미지가 흩어져 있어도 동작하도록 폴백) =====
     const FALLBACK_IMAGES = [
       "KakaoTalk_20260211_133239688.jpg",
       "KakaoTalk_20260211_133239688_01.jpg",
@@ -253,7 +228,7 @@
       "KakaoTalk_20260211_133239688_06.jpg",
       "KakaoTalk_20260211_133239688_07.png",
       "KakaoTalk_20260211_133239688_08.jpg",
-      "KakaoTalk_20260211_133239688_09.jpg",
+      "KakaoTalk_20260211_133239688_09.jpg"
     ];
 
     const $ = (id) => document.getElementById(id);
@@ -306,38 +281,42 @@
       return null;
     }
 
-    async function exists(url){
-      try{
-        const r = await fetch(url, { method:"HEAD", cache:"no-store" });
-        return r.ok;
-      }catch(e){
-        return false;
-      }
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
     }
 
-    async function resolveImageSrc(p){
-      const s = String(p||"").trim();
-      if(!s) return null;
+    function openModal(src, title){
+      $("modalImg").src = src;
+      $("modalTitle").textContent = title || "사진";
+      $("modal").classList.add("on");
+    }
+    function closeModal(){
+      $("modal").classList.remove("on");
+      $("modalImg").src = "";
+    }
 
-      // 절대/상대 경로 모두 처리
-      const candidates = [];
+    function bindJoinButtons(){
+      document.querySelectorAll("[data-join]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const v = btn.getAttribute("data-join");
+          const map = { yes:"참여", no:"불참", maybe:"미정" };
+          $("joinStatus").value = map[v] || v;
+        });
+      });
+    }
 
-      // manifest에 image/가 붙어 있든 없든 둘 다 시도
-      if(s.startsWith("image/") || s.startsWith("./image/")){
-        const bare = s.replace(/^\.?\/*image\//, "");
-        candidates.push(`image/${bare}`);
-        candidates.push(bare);
-      } else {
-        candidates.push(`image/${s}`);
-        candidates.push(s);
+    async function checkApi(){
+      try{
+        const r = await fetch(API_BASE_URL.replace(/\/+$/,"") + "/health", { cache:"no-store" });
+        setPill(r.ok);
+      }catch(e){
+        setPill(false);
       }
-
-      // 실제로 존재하는 첫 번째 경로를 선택
-      for(const c of candidates){
-        const u = new URL(c, location.href).toString();
-        if(await exists(u)) return c;
-      }
-      return null;
     }
 
     async function loadGallery(){
@@ -351,47 +330,70 @@
       let list = pickManifestImages(manifest);
       if(!Array.isArray(list) || list.length === 0){
         list = FALLBACK_IMAGES.slice();
-        $("galleryNote").textContent = "manifest.json의 이미지 목록을 찾지 못해, 현재 업로드된 파일명 기반 폴백 목록으로 표시 중입니다.";
+        $("galleryNote").textContent = "manifest.json의 images 목록을 찾지 못해, 폴백 목록(현재 업로드 파일명 기반)으로 표시 중입니다.";
       } else {
         $("galleryNote").textContent = "";
       }
 
-      const resolved = [];
-      for(const p of list){
-        const src = await resolveImageSrc(p);
-        if(src) resolved.push({ src, name: String(p) });
-      }
+      const gallery = $("gallery");
+      gallery.innerHTML = "";
 
-      $("galleryInfo").textContent = `표시 ${resolved.length}장`;
-      const g = $("gallery");
-      g.innerHTML = "";
+      let shown = 0;
 
-      if(resolved.length === 0){
-        g.innerHTML = `<div class="msg">이미지를 찾지 못했습니다. 저장소 루트에 이미지가 있는지, 파일명이 정확한지 확인하세요.</div>`;
-        return;
-      }
+      for(const raw of list){
+        const name = String(raw || "").trim();
+        if(!name) continue;
 
-      for(const it of resolved){
-        const d = document.createElement("div");
-        d.className = "ph";
+        const candidates = [];
+        if(name.startsWith("image/") || name.startsWith("./image/")){
+          const bare = name.replace(/^\.?\/*image\//, "");
+          candidates.push(`image/${bare}`);
+          candidates.push(bare);
+        } else {
+          candidates.push(`image/${name}`);
+          candidates.push(name);
+        }
+
+        const holder = document.createElement("div");
+        holder.className = "ph";
+
         const img = document.createElement("img");
         img.loading = "lazy";
-        img.alt = it.name;
-        img.src = it.src;
-        d.appendChild(img);
-        d.addEventListener("click", () => openModal(it.src, it.name));
-        g.appendChild(d);
-      }
-    }
+        img.alt = name;
 
-    function openModal(src, title){
-      $("modalImg").src = src;
-      $("modalTitle").textContent = title || "사진";
-      $("modal").classList.add("on");
-    }
-    function closeModal(){
-      $("modal").classList.remove("on");
-      $("modalImg").src = "";
+        let idx = 0;
+        const tryNext = () => {
+          if(idx >= candidates.length){
+            holder.remove();
+            $("galleryInfo").textContent = `표시 ${shown}장`;
+            return;
+          }
+          img.src = candidates[idx++];
+        };
+
+        img.onload = () => {
+          shown += 1;
+          $("galleryInfo").textContent = `표시 ${shown}장`;
+        };
+
+        img.onerror = () => tryNext();
+
+        holder.appendChild(img);
+        holder.addEventListener("click", () => {
+          const src = img.getAttribute("src") || "";
+          if(src) openModal(src, name);
+        });
+
+        gallery.appendChild(holder);
+        tryNext();
+      }
+
+      setTimeout(() => {
+        if(shown === 0){
+          $("galleryNote").textContent =
+            "이미지 로딩에 실패했습니다. 저장소 루트에 이미지가 있는지, 파일명이 manifest와 정확히 일치하는지 확인하세요.";
+        }
+      }, 1200);
     }
 
     async function loadGuestbook(){
@@ -470,35 +472,6 @@
       }
     }
 
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
-
-    function bindJoinButtons(){
-      document.querySelectorAll("[data-join]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const v = btn.getAttribute("data-join");
-          const map = { yes:"참여", no:"불참", maybe:"미정" };
-          $("joinStatus").value = map[v] || v;
-        });
-      });
-    }
-
-    async function checkApi(){
-      try{
-        const r = await fetch(API_BASE_URL.replace(/\/+$/,"") + "/health", { cache:"no-store" });
-        setPill(r.ok);
-      }catch(e){
-        setPill(false);
-      }
-    }
-
-    // init
     $("btnPost").addEventListener("click", postGuestbook);
     $("btnReload").addEventListener("click", loadGuestbook);
     $("btnJoin").addEventListener("click", postJoin);

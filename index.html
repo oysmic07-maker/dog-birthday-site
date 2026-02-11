@@ -33,6 +33,7 @@
         linear-gradient(180deg, var(--bg1), var(--bg2));
       overflow-x:hidden;
     }
+
     .wrap{max-width:980px;margin:0 auto;padding:22px 18px 40px}
     .card{
       background: linear-gradient(180deg, rgba(255,253,249,.92), rgba(255,253,249,.82));
@@ -169,6 +170,7 @@
       font-weight:600;
       font-size:12px;
       transition:transform .15s ease, box-shadow .15s ease;
+      user-select:none;
     }
     .btn:hover{
       transform: translateY(-1px);
@@ -252,6 +254,7 @@
       font-size:18px;
       transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
       z-index:4;
+      user-select:none;
     }
     .navBtn:hover{
       transform: translateY(-50%) scale(1.04);
@@ -284,6 +287,9 @@
       transition: transform .15s ease, background .15s ease;
     }
     .dot.on{background: rgba(176,138,75,.55); transform: scale(1.18)}
+
+    /* 파일명/카운터 숨김 */
+    .counter{display:none}
 
     /* 방명록 */
     .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
@@ -383,12 +389,18 @@
       <div class="ribbon">
         <span class="pill" id="apiPill">API: 연결 확인 중</span>
         <button class="btn" id="btnReload" type="button">방명록 새로고침</button>
+
+        <button class="btn btnPrimary" id="btnBgm" type="button">BGM 재생</button>
+        <span class="pill" style="gap:10px">
+          <span>볼륨</span>
+          <input id="bgmVol" type="range" min="0" max="1" step="0.01" value="0.35" />
+        </span>
       </div>
 
       <div class="section">
         <div class="secHead">
           <h2 class="secTitle">사진</h2>
-          <div class="secHint">좌/우 버튼 · 키보드 ←/→ · 자동재생</div>
+          <div class="secHint">좌/우 버튼 · 키보드 ←/→ · 자동재생(스페이스)</div>
         </div>
 
         <div class="panel sliderWrap">
@@ -405,6 +417,7 @@
                 <button class="btn btnPrimary" id="btnOpen" type="button">크게보기</button>
               </div>
               <div class="dots" id="dots"></div>
+              <div class="counter" id="counter">1 / 10</div>
             </div>
           </div>
 
@@ -415,13 +428,13 @@
       <div class="section">
         <div class="secHead">
           <h2 class="secTitle">방명록</h2>
-          <div class="secHint">이름은 기본값으로 고정되어 있습니다</div>
+          <div class="secHint">이름과 메시지를 남겨주세요</div>
         </div>
 
         <div class="panel">
           <div class="field">
             <label>이름</label>
-            <input id="gName" value="얘솔" readonly />
+            <input id="gName" placeholder="이름을 입력하세요" />
           </div>
           <div class="field">
             <label>축하 메시지</label>
@@ -453,6 +466,7 @@
 
   <script>
     const API_BASE_URL = "https://dog-birthday-api.onrender.com";
+    const BGM_FILE = "bgm.mp3";
 
     const IMAGES = [
       "KakaoTalk_20260211_133239688.jpg",
@@ -717,6 +731,62 @@
       }
     };
 
+    const Bgm = {
+      audio: null,
+      playing: false,
+      init(){
+        this.audio = new Audio(BGM_FILE);
+        this.audio.loop = true;
+        this.audio.preload = "auto";
+        this.audio.volume = parseFloat($("bgmVol")?.value || "0.35");
+
+        $("bgmVol")?.addEventListener("input", () => {
+          const v = parseFloat($("bgmVol")?.value || "0.35");
+          this.audio.volume = Number.isFinite(v) ? v : 0.35;
+        });
+
+        $("btnBgm")?.addEventListener("click", () => this.toggle());
+
+        // 자동재생 "시도" (막히면 버튼 누르면 재생)
+        this.tryAutoplay();
+      },
+      async tryAutoplay(){
+        try{
+          await this.audio.play();
+          this.playing = true;
+          this.sync();
+        }catch(e){
+          this.playing = false;
+          this.sync("재생 버튼을 눌러주세요");
+        }
+      },
+      async toggle(){
+        if(!this.audio) return;
+        try{
+          if(this.playing){
+            this.audio.pause();
+            this.playing = false;
+            this.sync();
+          }else{
+            await this.audio.play();
+            this.playing = true;
+            this.sync();
+          }
+        }catch(e){
+          this.playing = false;
+          this.sync("재생 권한 필요");
+        }
+      },
+      sync(note){
+        const btn = $("btnBgm");
+        if(!btn) return;
+        btn.textContent = this.playing ? "BGM 정지" : "BGM 재생";
+        if(note){
+          btn.textContent = (this.playing ? "BGM 정지" : "BGM 재생") + " · " + note;
+        }
+      }
+    };
+
     async function loadGuestbook(){
       const el = $("list");
       const msg = $("postMsg");
@@ -751,11 +821,15 @@
     }
 
     async function postGuestbook(){
-      const name = "유선";
+      const name = ($("gName")?.value || "").trim();
       const message = ($("gMsg")?.value || "").trim();
       const out = $("postMsg");
       if(out) out.textContent = "";
 
+      if(!name){
+        if(out) out.textContent = "이름을 입력하세요.";
+        return;
+      }
       if(!message){
         if(out) out.textContent = "메시지를 입력하세요.";
         return;
@@ -787,6 +861,7 @@
     checkApi();
     Floats.init();
     Slider.init();
+    Bgm.init();
     loadGuestbook();
   </script>
 </body>

@@ -3,188 +3,429 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>연유 생일파티 방명록</title>
+  <title>연유 생일파티 초대장</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root{
-      --bg:#0b0f17; --panel:#121a2a; --line:rgba(255,255,255,.12);
-      --txt:#eaf0ff; --muted:rgba(234,240,255,.72);
-      --accent:#6ee7ff; --accent2:#a78bfa;
+      --bg1:#fbf7f3;
+      --bg2:#f3eee8;
+      --paper:#fffdf9;
+      --ink:#2b2a28;
+      --muted:#6f6a63;
+      --line:rgba(43,42,40,.14);
+      --gold:#b08a4b;
+      --gold2:#d6b57a;
+      --shadow: 0 18px 60px rgba(0,0,0,.10);
+      --radius: 18px;
     }
+    *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Noto Sans KR,Apple SD Gothic Neo,Helvetica,Arial,sans-serif;
-      background: radial-gradient(1200px 800px at 20% 10%, rgba(110,231,255,.20), transparent 55%),
-                  radial-gradient(900px 700px at 80% 0%, rgba(167,139,250,.18), transparent 50%),
-                  var(--bg);
-      color:var(--txt);
+      color:var(--ink);
+      font-family:"Noto Serif KR", serif;
+      background:
+        radial-gradient(1200px 700px at 20% 0%, rgba(176,138,75,.14), transparent 58%),
+        radial-gradient(900px 650px at 80% 10%, rgba(214,181,122,.14), transparent 58%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
     }
-    .wrap{max-width:1080px;margin:0 auto;padding:20px}
-    .top{
-      display:flex;gap:14px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;
-      padding:18px;border:1px solid var(--line);border-radius:18px;
-      background: linear-gradient(180deg, rgba(18,26,42,.86), rgba(18,26,42,.60));
-      box-shadow: 0 18px 60px rgba(0,0,0,.35);
-    }
-    .title h1{margin:0;font-size:22px;letter-spacing:-.2px}
-    .title .sub{margin-top:6px;color:var(--muted);font-size:13px}
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:7px 10px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(0,0,0,.18);color:var(--muted);font-size:12px
-    }
-    .btn2{
-      appearance:none;border:1px solid var(--line);cursor:pointer;
-      padding:9px 12px;border-radius:12px;
-      background:rgba(0,0,0,.18);color:var(--txt);font-weight:600;
-      text-decoration:none;display:inline-flex;align-items:center;justify-content:center
-    }
-    .grid{margin-top:14px;display:grid;grid-template-columns: 1.4fr .6fr;gap:14px}
-    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:980px;margin:0 auto;padding:22px 18px 40px}
     .card{
-      border:1px solid var(--line);border-radius:18px;
-      background: linear-gradient(180deg, rgba(18,26,42,.78), rgba(18,26,42,.52));
-      box-shadow: 0 18px 60px rgba(0,0,0,.30);
+      background: linear-gradient(180deg, rgba(255,253,249,.92), rgba(255,253,249,.82));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
       overflow:hidden;
+      position:relative;
     }
-    .card .hd{
-      padding:14px 16px;border-bottom:1px solid var(--line);
-      display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap
+    .card::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(900px 480px at 20% 0%, rgba(255,255,255,.6), transparent 60%),
+        radial-gradient(700px 420px at 90% 10%, rgba(255,255,255,.55), transparent 60%);
+      pointer-events:none;
     }
-    .card .hd .h{font-weight:700}
-    .card .bd{padding:14px 16px}
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(0,0,0,.18);color:var(--muted);font-size:12px
+
+    .hero{
+      padding:34px 22px 22px;
+      text-align:center;
+      position:relative;
     }
-    .msg{font-size:13px;color:var(--muted)}
-    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    @media (max-width: 680px){ .gallery{grid-template-columns:repeat(2,1fr)} }
+    .topline{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      margin-bottom:12px;
+      color:var(--gold);
+      letter-spacing:.18em;
+      font-size:12px;
+    }
+    .topline::before, .topline::after{
+      content:"";
+      height:1px; width:64px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity:.7;
+    }
+    .title{
+      font-family:"Playfair Display", serif;
+      font-size:36px;
+      line-height:1.08;
+      letter-spacing:.02em;
+      margin:0;
+    }
+    .subtitle{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.65;
+    }
+    .seal{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:52px;height:52px;
+      border-radius:999px;
+      margin:18px 0 10px;
+      border:1px solid rgba(176,138,75,.35);
+      background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(255,255,255,.15)),
+        linear-gradient(135deg, rgba(176,138,75,.20), rgba(214,181,122,.18));
+      color:var(--gold);
+      font-weight:700;
+      letter-spacing:.02em;
+    }
+
+    .ribbon{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:0 18px 18px;
+      position:relative;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      color:var(--muted);
+      font-size:12px;
+    }
+    .btn{
+      appearance:none;
+      border:1px solid rgba(176,138,75,.35);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.70), rgba(255,255,255,.40));
+      color:var(--ink);
+      padding:10px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:12px;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(0,0,0,.08);
+    }
+    .btnPrimary{
+      border:1px solid rgba(176,138,75,.55);
+      background:
+        linear-gradient(90deg, rgba(214,181,122,.55), rgba(176,138,75,.30));
+      color:#2b2a28;
+    }
+
+    .section{
+      padding:18px 18px 20px;
+      border-top: 1px solid rgba(43,42,40,.10);
+      position:relative;
+    }
+    .secHead{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+    .secTitle{
+      margin:0;
+      font-size:16px;
+      letter-spacing:-.01em;
+    }
+    .secHint{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:14px;
+    }
+    @media (max-width: 920px){
+      .grid{grid-template-columns:1fr}
+      .title{font-size:32px}
+    }
+
+    .panel{
+      border:1px solid rgba(43,42,40,.12);
+      border-radius: 16px;
+      background: rgba(255,255,255,.55);
+      padding:14px;
+    }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 86px 1fr;
+      gap:10px 12px;
+      align-items:start;
+      margin:0;
+    }
+    .kv dt{
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.04em;
+    }
+    .kv dd{
+      margin:0;
+      font-size:13px;
+      line-height:1.65;
+    }
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(176,138,75,.35), transparent);
+      margin:14px 0;
+    }
+
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+    label{color:var(--muted);font-size:12px}
+    input,textarea{
+      width:100%;
+      border:1px solid rgba(43,42,40,.16);
+      background: rgba(255,255,255,.70);
+      border-radius: 14px;
+      padding:11px 12px;
+      outline:none;
+      color:var(--ink);
+      font-family:"Noto Serif KR", serif;
+      font-size:13px;
+    }
+    textarea{min-height:92px;resize:vertical}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .msg{color:var(--muted);font-size:12px;line-height:1.6}
+    .warn{color:#8b5a1e}
+
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 620px){
+      .gallery{grid-template-columns: repeat(2, 1fr)}
+    }
     .ph{
-      position:relative;aspect-ratio: 4/3;
-      border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.10);
-      background:rgba(0,0,0,.22);
+      position:relative;
+      aspect-ratio: 4/3;
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(43,42,40,.14);
+      background: rgba(255,255,255,.55);
       cursor:pointer;
     }
     .ph img{
-      width:100%;height:100%;object-fit:cover;display:block;
-      transform:scale(1.02);
-      transition:transform .25s ease;
-    }
-    .ph:hover img{transform:scale(1.07)}
-    .btn{
-      appearance:none;border:none;cursor:pointer;
-      padding:10px 12px;border-radius:12px;
-      color:#081018;font-weight:700;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-    }
-    .btn:disabled{opacity:.55;cursor:not-allowed}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-    .field label{font-size:12px;color:var(--muted)}
-    input,textarea{
       width:100%;
-      background:rgba(0,0,0,.20);
-      border:1px solid rgba(255,255,255,.12);
-      color:var(--txt);
-      border-radius:12px;
-      padding:10px 11px;
-      outline:none;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transform: scale(1.02);
+      transition: transform .25s ease, filter .25s ease;
+      filter: saturate(1.03) contrast(1.02);
     }
-    textarea{min-height:90px;resize:vertical}
+    .ph:hover img{
+      transform: scale(1.07);
+      filter: saturate(1.08) contrast(1.04);
+    }
+
     .list{display:flex;flex-direction:column;gap:10px}
     .item{
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:14px;padding:12px;background:rgba(0,0,0,.18);
+      border:1px solid rgba(43,42,40,.12);
+      border-radius: 16px;
+      background: rgba(255,255,255,.55);
+      padding:12px;
     }
-    .item .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-    .item .name{font-weight:800}
+    .item .meta{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:flex-end;
+    }
+    .item .name{font-weight:700}
     .item .ts{color:var(--muted);font-size:12px}
-    .item .txt{margin-top:8px;white-space:pre-wrap;line-height:1.45}
-    .warn{color:#ffd29b}
+    .item .txt{margin-top:8px;white-space:pre-wrap;line-height:1.55;font-size:13px}
+
+    .footer{
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      padding:16px 10px 0;
+    }
+
     .modal{
-      position:fixed;inset:0;background:rgba(0,0,0,.75);
-      display:none;align-items:center;justify-content:center;z-index:50;
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.65);
+      display:none;
+      align-items:center;
+      justify-content:center;
       padding:18px;
+      z-index:50;
     }
     .modal.on{display:flex}
-    .modal .box{
+    .modalBox{
       width:min(980px, 100%);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:18px;
-      background:rgba(10,14,22,.90);
+      background: rgba(255,253,249,.96);
+      border:1px solid rgba(255,255,255,.2);
+      border-radius: 18px;
       overflow:hidden;
+      box-shadow: 0 22px 70px rgba(0,0,0,.35);
     }
-    .modal .bar{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12);
+    .modalBar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 12px;
+      border-bottom:1px solid rgba(43,42,40,.12);
+      color:var(--ink);
+      background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.45));
     }
-    .modal .bar .t{font-weight:800}
-    .modal .bar .x{border:none;background:transparent;color:var(--txt);font-size:22px;cursor:pointer}
-    .modal img{width:100%;height:auto;display:block}
+    .modalTitle{
+      font-weight:700;
+      font-size:13px;
+      color:var(--muted);
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width: calc(100% - 42px);
+    }
+    .modalClose{
+      border:none;
+      background:transparent;
+      cursor:pointer;
+      font-size:22px;
+      line-height:1;
+      color:var(--ink);
+      padding:4px 8px;
+    }
+    .modalImg{width:100%;height:auto;display:block}
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <div class="top">
-      <div class="title">
-        <h1>연유 생일파티 방명록</h1>
-        <div class="sub">탄생: 2016-02-14 · 축하 메시지를 남기고, 참여 여부도 알려주세요</div>
+    <div class="card">
+      <div class="hero">
+        <div class="topline">INVITATION</div>
+        <div class="seal">YE</div>
+        <h1 class="title">연유 생일파티</h1>
+        <p class="subtitle">
+          탄생 2016.02.14<br>
+          축하 메시지를 남기고, 참여 여부도 알려주세요
+        </p>
       </div>
-      <div class="row">
-        <span class="pill" id="apiPill">API: 연결 확인 중</span>
-        <a class="btn2" href="./admin.html">관리자</a>
-      </div>
-    </div>
 
-    <div class="grid">
-      <section class="card">
-        <div class="hd">
-          <div class="h">사진 갤러리</div>
-          <div class="badge" id="galleryInfo">이미지 로딩 중</div>
+      <div class="ribbon">
+        <span class="pill" id="apiPill">API: 연결 확인 중</span>
+        <button class="btn" id="btnReload" type="button">방명록 새로고침</button>
+        <a class="btn btnPrimary" href="./admin.html">관리자</a>
+      </div>
+
+      <div class="section">
+        <div class="grid">
+          <div class="panel">
+            <div class="secHead">
+              <h2 class="secTitle">안내</h2>
+              <div class="secHint">초대장 형식 테마</div>
+            </div>
+
+            <dl class="kv">
+              <dt>주인공</dt><dd>연유</dd>
+              <dt>생일</dt><dd>2016-02-14</dd>
+              <dt>메시지</dt><dd>방명록에 축하 글을 남겨주시면, 연유가 기뻐합니다.</dd>
+            </dl>
+
+            <div class="divider"></div>
+
+            <div class="msg">
+              ▪ 참여 신청은 우측 카드에서 저장합니다.<br>
+              ▪ 방명록은 하단에서 작성 가능합니다.
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="secHead">
+              <h2 class="secTitle">참여 신청(RSVP)</h2>
+              <div class="secHint">간단 입력</div>
+            </div>
+
+            <div class="field">
+              <label>이름</label>
+              <input id="joinName" placeholder="예: 홍길동" />
+            </div>
+
+            <div class="field">
+              <label>참여 여부</label>
+              <div class="row">
+                <button class="btn" data-join="yes" type="button">참여</button>
+                <button class="btn" data-join="no" type="button">불참</button>
+                <button class="btn" data-join="maybe" type="button">미정</button>
+              </div>
+              <input id="joinStatus" placeholder="버튼을 눌러 선택" readonly />
+            </div>
+
+            <div class="field">
+              <label>메모</label>
+              <input id="joinMemo" placeholder="예: 2명 참석 / 선물 준비했어요" />
+            </div>
+
+            <div class="row">
+              <button class="btn btnPrimary" id="btnJoin" type="button">신청 저장</button>
+            </div>
+
+            <div class="msg warn" id="joinMsg"></div>
+          </div>
         </div>
-        <div class="bd">
-          <div class="msg">현재 저장소 구조(루트 또는 /image 폴더)에 맞춰 자동으로 로딩합니다.</div>
-          <div style="height:10px"></div>
+      </div>
+
+      <div class="section">
+        <div class="secHead">
+          <h2 class="secTitle">사진 갤러리</h2>
+          <div class="secHint" id="galleryInfo">표시 0장</div>
+        </div>
+
+        <div class="panel">
           <div class="gallery" id="gallery"></div>
           <div class="msg warn" id="galleryNote"></div>
         </div>
-      </section>
+      </div>
 
-      <aside class="card">
-        <div class="hd"><div class="h">파티 참여 신청</div></div>
-        <div class="bd">
-          <div class="field">
-            <label>이름</label>
-            <input id="joinName" placeholder="예: 홍길동" />
-          </div>
-          <div class="field">
-            <label>참여 여부</label>
-            <div class="row">
-              <button class="btn2" data-join="yes" type="button">참여</button>
-              <button class="btn2" data-join="no" type="button">불참</button>
-              <button class="btn2" data-join="maybe" type="button">미정</button>
-            </div>
-            <input id="joinStatus" placeholder="버튼을 눌러 선택" readonly />
-          </div>
-          <div class="field">
-            <label>메모</label>
-            <input id="joinMemo" placeholder="예: 2명 참석 / 선물 준비했어요" />
-          </div>
-          <div class="row">
-            <button class="btn" id="btnJoin" type="button">신청 저장</button>
-          </div>
-          <div class="msg warn" id="joinMsg"></div>
+      <div class="section">
+        <div class="secHead">
+          <h2 class="secTitle">방명록</h2>
+          <div class="secHint">축하 메시지를 남겨주세요</div>
         </div>
-      </aside>
 
-      <section class="card" style="grid-column: 1 / -1;">
-        <div class="hd">
-          <div class="h">방명록</div>
-          <div class="row"><button class="btn2" id="btnReload" type="button">새로고침</button></div>
-        </div>
-        <div class="bd">
+        <div class="panel">
           <div class="field">
             <label>이름</label>
             <input id="gName" placeholder="예: 유선" />
@@ -194,31 +435,33 @@
             <textarea id="gMsg" placeholder="연유 생일 축하해요!"></textarea>
           </div>
           <div class="row">
-            <button class="btn" id="btnPost" type="button">등록</button>
+            <button class="btn btnPrimary" id="btnPost" type="button">등록</button>
           </div>
           <div class="msg warn" id="postMsg"></div>
 
           <div style="height:12px"></div>
           <div class="list" id="list"></div>
         </div>
-      </section>
+
+        <div class="footer">© 연유 생일파티 · 메시지와 함께 따뜻한 하루 되세요</div>
+      </div>
     </div>
   </div>
 
   <div class="modal" id="modal">
-    <div class="box">
-      <div class="bar">
-        <div class="t" id="modalTitle">사진</div>
-        <button class="x" id="modalClose" aria-label="닫기">×</button>
+    <div class="modalBox">
+      <div class="modalBar">
+        <div class="modalTitle" id="modalTitle">사진</div>
+        <button class="modalClose" id="modalClose" aria-label="닫기">×</button>
       </div>
-      <img id="modalImg" alt="preview" />
+      <img class="modalImg" id="modalImg" alt="preview" />
     </div>
   </div>
 
   <script>
     const API_BASE_URL = "https://dog-birthday-api.onrender.com";
 
-    const FALLBACK_IMAGES = [
+    const IMAGES = [
       "KakaoTalk_20260211_133239688.jpg",
       "KakaoTalk_20260211_133239688_01.jpg",
       "KakaoTalk_20260211_133239688_02.jpg",
@@ -233,17 +476,32 @@
 
     const $ = (id) => document.getElementById(id);
 
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
+
+    function fmt(ts){
+      try{
+        const d = new Date(ts);
+        if(Number.isNaN(d.getTime())) return String(ts||"");
+        const y = d.getFullYear();
+        const m = String(d.getMonth()+1).padStart(2,"0");
+        const da = String(d.getDate()).padStart(2,"0");
+        const hh = String(d.getHours()).padStart(2,"0");
+        const mm = String(d.getMinutes()).padStart(2,"0");
+        return `${y}-${m}-${da} ${hh}:${mm}`;
+      }catch(e){ return String(ts||""); }
+    }
+
     function setPill(ok){
       const el = $("apiPill");
-      if(ok){
-        el.textContent = "API: 연결됨";
-        el.style.borderColor = "rgba(110,231,255,.45)";
-        el.style.color = "rgba(234,240,255,.90)";
-      } else {
-        el.textContent = "API: 연결 실패";
-        el.style.borderColor = "rgba(255,210,155,.45)";
-        el.style.color = "rgba(255,210,155,.90)";
-      }
+      if(!el) return;
+      el.textContent = ok ? "API: 연결됨" : "API: 연결 실패";
     }
 
     async function api(path, opts={}){
@@ -260,56 +518,6 @@
       return ct.includes("application/json") ? r.json() : r.text();
     }
 
-    function fmt(ts){
-      try{
-        const d = new Date(ts);
-        if(Number.isNaN(d.getTime())) return String(ts||"");
-        const y = d.getFullYear();
-        const m = String(d.getMonth()+1).padStart(2,"0");
-        const da = String(d.getDate()).padStart(2,"0");
-        const hh = String(d.getHours()).padStart(2,"0");
-        const mm = String(d.getMinutes()).padStart(2,"0");
-        return `${y}-${m}-${da} ${hh}:${mm}`;
-      }catch(e){ return String(ts||""); }
-    }
-
-    function pickManifestImages(manifest){
-      if(!manifest || typeof manifest !== "object") return null;
-      if(Array.isArray(manifest.images)) return manifest.images;
-      if(Array.isArray(manifest.gallery)) return manifest.gallery;
-      if(manifest.assets && Array.isArray(manifest.assets.images)) return manifest.assets.images;
-      return null;
-    }
-
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
-
-    function openModal(src, title){
-      $("modalImg").src = src;
-      $("modalTitle").textContent = title || "사진";
-      $("modal").classList.add("on");
-    }
-    function closeModal(){
-      $("modal").classList.remove("on");
-      $("modalImg").src = "";
-    }
-
-    function bindJoinButtons(){
-      document.querySelectorAll("[data-join]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const v = btn.getAttribute("data-join");
-          const map = { yes:"참여", no:"불참", maybe:"미정" };
-          $("joinStatus").value = map[v] || v;
-        });
-      });
-    }
-
     async function checkApi(){
       try{
         const r = await fetch(API_BASE_URL.replace(/\/+$/,"") + "/health", { cache:"no-store" });
@@ -319,87 +527,73 @@
       }
     }
 
-    async function loadGallery(){
-      let manifest = null;
-      try{
-        manifest = await fetch("./manifest.json", { cache:"no-store" }).then(r => r.ok ? r.json() : null);
-      }catch(e){
-        manifest = null;
-      }
+    function openModal(src, title){
+      const modal = $("modal");
+      const img = $("modalImg");
+      const t = $("modalTitle");
+      if(!modal || !img) return;
+      img.src = src;
+      if(t) t.textContent = title || "사진";
+      modal.classList.add("on");
+    }
+    function closeModal(){
+      const modal = $("modal");
+      const img = $("modalImg");
+      if(modal) modal.classList.remove("on");
+      if(img) img.src = "";
+    }
 
-      let list = pickManifestImages(manifest);
-      if(!Array.isArray(list) || list.length === 0){
-        list = FALLBACK_IMAGES.slice();
-        $("galleryNote").textContent = "manifest.json의 images 목록을 찾지 못해, 폴백 목록(현재 업로드 파일명 기반)으로 표시 중입니다.";
-      } else {
-        $("galleryNote").textContent = "";
-      }
-
+    function renderGallery(){
       const gallery = $("gallery");
+      const info = $("galleryInfo");
+      const note = $("galleryNote");
+      if(!gallery) return;
+
       gallery.innerHTML = "";
+      if(note) note.textContent = "";
 
       let shown = 0;
 
-      for(const raw of list){
-        const name = String(raw || "").trim();
-        if(!name) continue;
-
-        const candidates = [];
-        if(name.startsWith("image/") || name.startsWith("./image/")){
-          const bare = name.replace(/^\.?\/*image\//, "");
-          candidates.push(`image/${bare}`);
-          candidates.push(bare);
-        } else {
-          candidates.push(`image/${name}`);
-          candidates.push(name);
-        }
-
+      IMAGES.forEach((name) => {
         const holder = document.createElement("div");
         holder.className = "ph";
 
         const img = document.createElement("img");
         img.loading = "lazy";
         img.alt = name;
-
-        let idx = 0;
-        const tryNext = () => {
-          if(idx >= candidates.length){
-            holder.remove();
-            $("galleryInfo").textContent = `표시 ${shown}장`;
-            return;
-          }
-          img.src = candidates[idx++];
-        };
+        img.src = name;
 
         img.onload = () => {
           shown += 1;
-          $("galleryInfo").textContent = `표시 ${shown}장`;
+          if(info) info.textContent = `표시 ${shown}장`;
+        };
+        img.onerror = () => {
+          holder.remove();
+          if(info) info.textContent = `표시 ${shown}장`;
         };
 
-        img.onerror = () => tryNext();
-
         holder.appendChild(img);
-        holder.addEventListener("click", () => {
-          const src = img.getAttribute("src") || "";
-          if(src) openModal(src, name);
-        });
-
+        holder.addEventListener("click", () => openModal(name, name));
         gallery.appendChild(holder);
-        tryNext();
-      }
+      });
+
+      if(info) info.textContent = "표시 0장";
 
       setTimeout(() => {
-        if(shown === 0){
-          $("galleryNote").textContent =
-            "이미지 로딩에 실패했습니다. 저장소 루트에 이미지가 있는지, 파일명이 manifest와 정확히 일치하는지 확인하세요.";
+        if(shown === 0 && note){
+          note.textContent = "이미지가 표시되지 않으면, 파일명이 정확한지 확인하세요.";
         }
-      }, 1200);
+      }, 900);
     }
 
     async function loadGuestbook(){
-      $("postMsg").textContent = "";
       const el = $("list");
+      const msg = $("postMsg");
+      if(msg) msg.textContent = "";
+      if(!el) return;
+
       el.innerHTML = `<div class="msg">불러오는 중...</div>`;
+
       try{
         const data = await api("/api/guestbook", { method:"GET" });
         const rows = Array.isArray(data) ? data : (data.items || []);
@@ -426,61 +620,83 @@
     }
 
     async function postGuestbook(){
-      $("postMsg").textContent = "";
-      const name = $("gName").value.trim();
-      const message = $("gMsg").value.trim();
+      const name = ($("gName")?.value || "").trim();
+      const message = ($("gMsg")?.value || "").trim();
+      const out = $("postMsg");
+      if(out) out.textContent = "";
+
       if(!name || !message){
-        $("postMsg").textContent = "이름과 메시지를 모두 입력하세요.";
+        if(out) out.textContent = "이름과 메시지를 모두 입력하세요.";
         return;
       }
-      $("btnPost").disabled = true;
+
+      const btn = $("btnPost");
+      if(btn) btn.disabled = true;
+
       try{
         await api("/api/guestbook", {
           method:"POST",
           body: JSON.stringify({ name, message })
         });
-        $("gMsg").value = "";
+        if($("gMsg")) $("gMsg").value = "";
         await loadGuestbook();
       }catch(e){
-        $("postMsg").textContent = `등록 실패: ${String(e.message||e)}`;
+        if(out) out.textContent = `등록 실패: ${String(e.message||e)}`;
       } finally {
-        $("btnPost").disabled = false;
+        if(btn) btn.disabled = false;
       }
     }
 
+    function bindJoinButtons(){
+      document.querySelectorAll("[data-join]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const v = btn.getAttribute("data-join");
+          const map = { yes:"참여", no:"불참", maybe:"미정" };
+          const box = $("joinStatus");
+          if(box) box.value = map[v] || v;
+        });
+      });
+    }
+
     async function postJoin(){
-      $("joinMsg").textContent = "";
-      const name = $("joinName").value.trim();
-      const status = $("joinStatus").value.trim();
-      const memo = $("joinMemo").value.trim();
+      const name = ($("joinName")?.value || "").trim();
+      const status = ($("joinStatus")?.value || "").trim();
+      const memo = ($("joinMemo")?.value || "").trim();
+      const out = $("joinMsg");
+      if(out) out.textContent = "";
+
       if(!name || !status){
-        $("joinMsg").textContent = "이름과 참여 여부를 입력하세요.";
+        if(out) out.textContent = "이름과 참여 여부를 입력하세요.";
         return;
       }
-      $("btnJoin").disabled = true;
+
+      const btn = $("btnJoin");
+      if(btn) btn.disabled = true;
+
       try{
         await api("/api/join", {
           method:"POST",
           body: JSON.stringify({ name, status, memo })
         });
-        $("joinMemo").value = "";
-        $("joinMsg").textContent = "저장 완료";
+        if($("joinMemo")) $("joinMemo").value = "";
+        if(out) out.textContent = "저장 완료";
       }catch(e){
-        $("joinMsg").textContent = `저장 실패: ${String(e.message||e)}`;
+        if(out) out.textContent = `저장 실패: ${String(e.message||e)}`;
       } finally {
-        $("btnJoin").disabled = false;
+        if(btn) btn.disabled = false;
       }
     }
 
-    $("btnPost").addEventListener("click", postGuestbook);
-    $("btnReload").addEventListener("click", loadGuestbook);
-    $("btnJoin").addEventListener("click", postJoin);
-    $("modalClose").addEventListener("click", closeModal);
-    $("modal").addEventListener("click", (e) => { if(e.target === $("modal")) closeModal(); });
-    bindJoinButtons();
+    $("btnPost")?.addEventListener("click", postGuestbook);
+    $("btnReload")?.addEventListener("click", loadGuestbook);
+    $("btnJoin")?.addEventListener("click", postJoin);
 
+    $("modalClose")?.addEventListener("click", closeModal);
+    $("modal")?.addEventListener("click", (e) => { if(e.target === $("modal")) closeModal(); });
+
+    bindJoinButtons();
     checkApi();
-    loadGallery();
+    renderGallery();
     loadGuestbook();
   </script>
 </body>

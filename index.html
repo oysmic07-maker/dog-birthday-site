@@ -1,4 +1,237 @@
-<style>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>연유 생일파티 초대장</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg1: #fbf7f3; --bg2: #f3eee8; --paper: #fffdf9;
+      --ink: #2b2a28; --muted: #6f6a63; --line: rgba(43,42,40,.14);
+      --gold: #b08a4b; --gold2: #d6b57a;
+      --shadow: 0 18px 60px rgba(0,0,0,.10);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; color: var(--ink); font-family: "Noto Serif KR", serif;
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+    }
+
+    /* --- 애니메이션 --- */
+    .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    .wrap { max-width: 980px; margin: 0 auto; padding: 22px 18px 40px; }
+    .card {
+      background: rgba(255,253,249,0.9); border: 1px solid var(--line);
+      border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+    }
+
+    /* --- 히어로 섹션 --- */
+    .hero { padding: 50px 20px; text-align: center; }
+    .topline { color: var(--gold); letter-spacing: 0.2em; font-size: 12px; margin-bottom: 15px; }
+    .title { font-family: "Playfair Display", serif; font-size: 38px; margin: 10px 0; }
+    .seal {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--gold);
+      color: var(--gold); font-weight: bold; margin-bottom: 20px;
+    }
+
+    /* --- 슬라이더 --- */
+    .section { padding: 40px 20px; border-top: 1px solid var(--line); }
+    .secTitle { font-family: "Playfair Display", serif; font-size: 24px; text-align: center; margin-bottom: 25px; color: var(--gold); }
+    .slider { position: relative; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow); }
+    .stage { aspect-ratio: 16/10; position: relative; background: #eee; }
+    .slideImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.8s; }
+    .slideImg.on { opacity: 1; }
+
+    /* --- 갤러리 그리드 --- */
+    .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+    .photo-item { aspect-ratio: 1; border-radius: 8px; overflow: hidden; cursor: pointer; }
+    .photo-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+    .photo-item:hover img { transform: scale(1.1); }
+
+    /* --- 방명록 --- */
+    .input-box { background: white; padding: 20px; border-radius: 15px; border: 1px solid var(--line); margin-bottom: 20px; }
+    input, textarea {
+      width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 8px;
+      margin-bottom: 10px; font-family: inherit;
+    }
+    .btn {
+      padding: 10px 20px; border-radius: 999px; border: 1px solid var(--gold);
+      background: transparent; color: var(--gold); cursor: pointer; transition: 0.3s; font-weight: 600;
+    }
+    .btnPrimary { background: var(--gold); color: white; border: none; width: 100%; padding: 15px; margin-top: 5px; }
+    .btn:hover { background: var(--gold2); color: white; }
+
+    .guest-item { background: rgba(255,255,255,0.5); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--line); position: relative; }
+    .guest-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+    .del-btn { color: #ff6b6b; cursor: pointer; border: none; background: none; font-size: 11px; }
+
+    .ribbon { display: flex; justify-content: center; gap: 10px; padding: 20px; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="hero reveal">
+        <div class="topline">HAPPY BIRTHDAY</div>
+        <div class="seal">YE</div>
+        <h1 class="title">연유 생일파티</h1>
+        <p class="subtitle">2016.02.14 <br> 소중한 순간들을 기록합니다.</p>
+      </div>
+
+      <div class="ribbon reveal">
+        <button class="btn" id="btnReload">방명록 갱신</button>
+        <button class="btn" onclick="checkAdminAccess()">관리자 모드</button>
+      </div>
+
+      <div class="section reveal">
+        <h2 class="secTitle">Highlights</h2>
+        <div class="slider">
+          <div class="stage">
+            <img class="slideImg" id="imgA" alt="slide" />
+            <img class="slideImg" id="imgB" alt="slide" />
+          </div>
+        </div>
+      </div>
+
+      <div class="section reveal">
+        <h2 class="secTitle">Gallery</h2>
+        <div class="photo-grid" id="photoGrid"></div>
+      </div>
+
+      <div class="section reveal">
+        <h2 class="secTitle">Guestbook</h2>
+        <div class="input-box">
+          <input id="gName" placeholder="작성자 성함">
+          <textarea id="gMsg" placeholder="연유에게 따뜻한 한마디를 남겨주세요."></textarea>
+          <button class="btn btnPrimary" id="btnPost">축하 메시지 보내기 ✨</button>
+          <div id="postMsg" style="text-align:center; margin-top:10px; font-size:12px;"></div>
+        </div>
+
+        <div id="list">
+          </div>
+      </div>
+
+      <div style="text-align: center; padding: 30px; color: var(--muted); font-size: 12px;">
+        © 2026 연유의 생일파티 | Created with Love
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = "https://dog-birthday-api.onrender.com";
+    const IMAGES = [
+      "KakaoTalk_20260211_133239688.jpg", "KakaoTalk_20260211_133239688_01.jpg",
+      "KakaoTalk_20260211_133239688_02.jpg", "KakaoTalk_20260211_133239688_03.jpg",
+      "KakaoTalk_20260211_133239688_04.jpg", "KakaoTalk_20260211_133239688_05.jpg",
+      "KakaoTalk_20260211_133239688_06.jpg", "KakaoTalk_20260211_133239688_07.png",
+      "KakaoTalk_20260211_133239688_08.jpg", "KakaoTalk_20260211_133239688_09.jpg"
+    ];
+
+    let isAdmin = false;
+
+    // 1. 관리자 체크 (비밀번호 보호)
+    function checkAdminAccess() {
+      const pw = prompt("관리자 비밀번호를 입력하세요.");
+      if (pw === "1234") { // 설정하신 비밀번호
+        isAdmin = true;
+        alert("관리자 모드가 활성화되었습니다. (삭제 버튼 활성화)");
+        loadGuestbook();
+      } else {
+        alert("비밀번호가 올바르지 않습니다.");
+      }
+    }
+
+    // 2. 갤러리 그리드 생성
+    const grid = document.getElementById('photoGrid');
+    IMAGES.forEach(src => {
+      const item = document.createElement('div');
+      item.className = 'photo-item reveal';
+      item.innerHTML = `<img src="${src}" loading="lazy">`;
+      grid.appendChild(item);
+    });
+
+    // 3. 슬라이더 로직
+    let cur = 0, isA = true;
+    const imgA = document.getElementById('imgA'), imgB = document.getElementById('imgB');
+    function nextSlide() {
+      const n = (cur + 1) % IMAGES.length;
+      const t = isA ? imgB : imgA, active = isA ? imgA : imgB;
+      t.src = IMAGES[n];
+      t.onload = () => { t.classList.add('on'); active.classList.remove('on'); isA = !isA; cur = n; };
+    }
+    imgA.src = IMAGES[0]; imgA.classList.add('on');
+    setInterval(nextSlide, 3500);
+
+    // 4. 방명록 저장
+    document.getElementById('btnPost').onclick = async () => {
+      const name = document.getElementById('gName').value.trim();
+      const message = document.getElementById('gMsg').value.trim();
+      if(!name || !message) return alert("내용을 입력해주세요.");
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/guestbook`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, message })
+        });
+        if(res.ok) {
+          document.getElementById('gName').value = '';
+          document.getElementById('gMsg').value = '';
+          loadGuestbook();
+        }
+      } catch(e) { alert("저장 실패"); }
+    };
+
+    // 5. 방명록 로드 및 삭제
+    async function loadGuestbook() {
+      const list = document.getElementById('list');
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/guestbook`);
+        const data = await res.json();
+        const rows = Array.isArray(data) ? data : data.items;
+        list.innerHTML = rows.map(item => `
+          <div class="guest-item reveal">
+            <div class="guest-meta">
+              <span><b>${item.name}</b></span>
+              <span>${new Date(item.created_at || Date.now()).toLocaleDateString()}</span>
+            </div>
+            <div style="font-size:14px;">${item.message}</div>
+            ${isAdmin ? `<button class="del-btn" onclick="deleteEntry('${item._id || item.id}')">삭제</button>` : ''}
+          </div>
+        `).join('');
+        applyReveal();
+      } catch(e) { list.innerHTML = "데이터를 불러올 수 없습니다."; }
+    }
+
+    async function deleteEntry(id) {
+      if(!confirm("삭제하시겠습니까?")) return;
+      await fetch(`${API_BASE_URL}/api/guestbook/${id}`, { method: 'DELETE' });
+      loadGuestbook();
+    }
+
+    // 애니메이션 트리거
+    function applyReveal() {
+      const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); }));
+      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    }
+
+    document.getElementById('btnReload').onclick = loadGuestbook;
+    loadGuestbook();
+    applyReveal();
+  </script>
+</body>
+</html><style>
   /* 삭제 버튼 스타일 추가 */
   .del-btn {
     background: #ff4d4d; color: white; border: none;

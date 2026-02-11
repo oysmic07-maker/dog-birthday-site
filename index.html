@@ -1,204 +1,153 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>연유 생일파티 초대장</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root{
-      --bg1:#fbf7f3; --bg2:#f3eee8; --paper:#fffdf9;
-      --ink:#2b2a28; --muted:#6f6a63; --line:rgba(43,42,40,.14);
-      --gold:#b08a4b; --gold2:#d6b57a;
-      --shadow: 0 18px 60px rgba(0,0,0,.10);
-      --radius: 18px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%; scroll-behavior: smooth;}
-    body{
-      margin:0; color:var(--ink); font-family:"Noto Serif KR", serif;
-      background: radial-gradient(1200px 700px at 20% 0%, rgba(176,138,75,.14), transparent 58%),
-                  radial-gradient(900px 650px at 80% 10%, rgba(214,181,122,.14), transparent 58%),
-                  linear-gradient(180deg, var(--bg1), var(--bg2));
-    }
-
-    /* 애니메이션 기초 설정 */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s ease-out;
-    }
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .wrap{max-width:980px; margin:0 auto; padding:22px 18px 40px}
-    .card{
-      background: linear-gradient(180deg, rgba(255,253,249,.92), rgba(255,253,249,.82));
-      border: 1px solid var(--line); border-radius: var(--radius);
-      box-shadow: var(--shadow); overflow:hidden; position:relative;
-    }
-
-    .hero{ padding:60px 22px; text-align:center; }
-    .title{ font-family:"Playfair Display", serif; font-size:42px; margin:20px 0; animation: fadeInDown 1s both; }
-    
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* 이미지 갤러리 그리드 추가 */
-    .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
-      padding: 14px;
-    }
-    .photo-item {
-      aspect-ratio: 1;
-      overflow: hidden;
-      border-radius: 12px;
-      cursor: pointer;
-      border: 1px solid var(--line);
-    }
-    .photo-item img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-    .photo-item:hover img {
-      transform: scale(1.1);
-    }
-
-    /* 슬라이더 개선 */
-    .slider { position:relative; border-radius: 18px; overflow:hidden; background: #eee; }
-    .stage { aspect-ratio: 16/10; position: relative; }
-    .slideImg {
-      position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
-      opacity:0; transition: opacity 0.8s ease-in-out;
-    }
-    .slideImg.on { opacity:1; }
-
-    .btn {
-      padding:10px 20px; border-radius:999px; border:1px solid var(--gold);
-      background: white; cursor:pointer; transition: 0.3s;
-    }
-    .btn:hover { background: var(--gold); color: white; }
-
-    .section { padding:40px 18px; border-top: 1px solid var(--line); }
-    .secTitle { font-size:24px; text-align:center; margin-bottom:30px; color:var(--gold); }
-
-    /* 방명록 스타일 */
-    .item { background: white; padding:15px; border-radius:15px; margin-bottom:10px; border: 1px solid var(--line); }
-  </style>
-</head>
+<style>
+  /* 삭제 버튼 스타일 추가 */
+  .del-btn {
+    background: #ff4d4d; color: white; border: none;
+    padding: 4px 8px; border-radius: 6px; cursor: pointer;
+    font-size: 11px; float: right; transition: 0.2s;
+  }
+  .del-btn:hover { background: #cc0000; }
+  
+  /* 입력 폼 스타일 개선 */
+  input, textarea { border: 1px solid var(--line); border-radius: 10px; padding: 10px; width: 100%; margin-bottom: 8px; }
+  .btnPrimary { background: var(--gold); color: white; border: none; font-weight: bold; width: 100%; padding: 12px; }
+</style>
 
 <body>
   <div class="wrap">
     <div class="card">
-      <div class="hero reveal">
-        <div class="topline">INVITATION</div>
-        <div class="seal">YE</div>
-        <h1 class="title">연유 생일파티</h1>
-        <p class="subtitle">2016.02.14 <br> 소중한 연유의 기록들을 함께 봐주세요.</p>
+      <div class="ribbon reveal">
+        <span class="pill" id="apiPill">API: 연결 확인 중</span>
+        <button class="btn" id="btnReload">새로고침</button>
+        <button class="btn btnPrimary" onclick="checkAdminAccess()">관리자</button>
       </div>
 
       <div class="section reveal">
-        <h2 class="secTitle">Highlights</h2>
-        <div class="slider">
-          <div class="stage" id="stage">
-            <img class="slideImg" id="imgA" alt="slide" />
-            <img class="slideImg" id="imgB" alt="slide" />
-          </div>
-        </div>
-      </div>
-
-      <div class="section reveal">
-        <h2 class="secTitle">Photo Gallery</h2>
-        <div class="photo-grid" id="photoGrid">
-          </div>
-      </div>
-
-      <div class="section reveal">
-        <h2 class="secTitle">Guestbook</h2>
+        <h2 class="secTitle">방명록 남기기</h2>
         <div class="panel">
-          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-            <input id="gName" placeholder="이름" style="flex:1">
-            <button class="btn" id="btnPost">등록</button>
-          </div>
-          <textarea id="gMsg" placeholder="축하 메시지를 남겨주세요" style="width:100%; height:80px; border-radius:10px; padding:10px; border:1px solid #ddd;"></textarea>
-          <div id="list" style="margin-top:20px"></div>
+          <input id="gName" placeholder="작성자 이름" maxlength="10">
+          <textarea id="gMsg" placeholder="연유에게 축하 메시지를 남겨주세요!" maxlength="200"></textarea>
+          <button class="btn btnPrimary" id="btnPost">축하 메시지 저장하기 ✨</button>
+          <div id="postMsg" class="msg warn" style="margin-top:10px; text-align:center;"></div>
         </div>
       </div>
 
-      <div class="footer" style="padding: 20px; text-align: center; color: var(--muted);">
-        © 연유의 행복한 생일파티
+      <div class="section reveal">
+        <h2 class="secTitle">축하의 글들</h2>
+        <div id="list" class="list">
+          </div>
       </div>
     </div>
   </div>
 
   <script>
-    const IMAGES = [
-      "KakaoTalk_20260211_133239688.jpg",
-      "KakaoTalk_20260211_133239688_01.jpg",
-      "KakaoTalk_20260211_133239688_02.jpg",
-      "KakaoTalk_20260211_133239688_03.jpg",
-      "KakaoTalk_20260211_133239688_04.jpg",
-      "KakaoTalk_20260211_133239688_05.jpg",
-      "KakaoTalk_20260211_133239688_06.jpg",
-      "KakaoTalk_20260211_133239688_07.png",
-      "KakaoTalk_20260211_133239688_08.jpg",
-      "KakaoTalk_20260211_133239688_09.jpg"
-    ];
+    const API_BASE_URL = "https://dog-birthday-api.onrender.com";
+    const ADMIN_PW = "1234"; // 실제 운영 시 보안을 위해 서버에서 검증해야 하나, 현재 단계에서 1차 차단용
 
-    // 1. 스크롤 애니메이션 관찰자 설정
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // 2. 갤러리 그리드 생성
-    const grid = document.getElementById('photoGrid');
-    IMAGES.forEach(imgName => {
-      const div = document.createElement('div');
-      div.className = 'photo-item';
-      div.innerHTML = `<img src="${imgName}" alt="연유">`;
-      grid.appendChild(div);
-    });
-
-    // 3. 간단 슬라이더 로직
-    let currentIdx = 0;
-    const imgA = document.getElementById('imgA');
-    const imgB = document.getElementById('imgB');
-    let isA = true;
-
-    function nextSlide() {
-      const nextIdx = (currentIdx + 1) % IMAGES.length;
-      const targetImg = isA ? imgB : imgA;
-      const activeImg = isA ? imgA : imgB;
-
-      targetImg.src = IMAGES[nextIdx];
-      targetImg.onload = () => {
-        targetImg.classList.add('on');
-        activeImg.classList.remove('on');
-        isA = !isA;
-        currentIdx = nextIdx;
-      };
+    // 1. 관리자 접근 제어
+    function checkAdminAccess() {
+      const pw = prompt("관리자 비밀번호를 입력하세요.");
+      if (pw === ADMIN_PW) {
+        // 비밀번호 일치 시 관리자 페이지로 이동 (쿼리 스트링 등으로 권한 전달 가능)
+        location.href = "./admin.html?token=" + btoa(pw); 
+      } else {
+        alert("비밀번호가 틀렸습니다.");
+      }
     }
-    imgA.src = IMAGES[0];
-    imgA.classList.add('on');
-    setInterval(nextSlide, 3000);
 
-    // 방명록 등 기존 로직은 유지하거나 필요에 따라 추가...
+    // 2. 방명록 저장 기능 (POST)
+    async function postGuestbook() {
+      const name = document.getElementById("gName").value.trim();
+      const message = document.getElementById("gMsg").value.trim();
+      const out = document.getElementById("postMsg");
+
+      if (!name || !message) {
+        out.textContent = "이름과 내용을 모두 적어주세요!";
+        return;
+      }
+
+      try {
+        out.textContent = "저장 중...";
+        const response = await fetch(`${API_BASE_URL}/api/guestbook`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, message })
+        });
+
+        if (response.ok) {
+          out.textContent = "성공적으로 저장되었습니다! 🎉";
+          document.getElementById("gName").value = "";
+          document.getElementById("gMsg").value = "";
+          loadGuestbook(); // 리스트 갱신
+        } else {
+          throw new Error("저장 실패");
+        }
+      } catch (e) {
+        out.textContent = "오류가 발생했습니다. 다시 시도해주세요.";
+      }
+    }
+
+    // 3. 방명록 삭제 기능 (DELETE)
+    async function deleteEntry(id) {
+      if (!confirm("정말 이 글을 삭제하시겠습니까?")) return;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/guestbook/${id}`, {
+          method: "DELETE"
+        });
+        if (response.ok) {
+          alert("삭제되었습니다.");
+          loadGuestbook();
+        }
+      } catch (e) {
+        alert("삭제 중 오류가 발생했습니다.");
+      }
+    }
+
+    // 4. 방명록 불러오기 및 렌더링
+    async function loadGuestbook() {
+      const listEl = document.getElementById("list");
+      listEl.innerHTML = "불러오는 중...";
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/guestbook`);
+        const data = await response.json();
+        const rows = Array.isArray(data) ? data : data.items;
+
+        listEl.innerHTML = "";
+        rows.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "item reveal";
+          div.innerHTML = `
+            <div class="meta">
+              <span class="name"><b>${item.name}</b></span>
+              <span class="ts">${new Date(item.created_at || Date.now()).toLocaleDateString()}</span>
+              <button class="del-btn" onclick="deleteEntry('${item._id || item.id}')">삭제</button>
+            </div>
+            <div class="txt" style="margin-top:8px">${item.message}</div>
+          `;
+          listEl.appendChild(div);
+        });
+        // 새로 생긴 요소들에 애니메이션 적용
+        applyReveal();
+      } catch (e) {
+        listEl.innerHTML = "방명록을 불러올 수 없습니다.";
+      }
+    }
+
+    // 초기 실행
+    document.getElementById("btnPost").onclick = postGuestbook;
+    document.getElementById("btnReload").onclick = loadGuestbook;
+    loadGuestbook();
+
+    // 스크롤 애니메이션 함수
+    function applyReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+    applyReveal();
   </script>
 </body>
-</html>

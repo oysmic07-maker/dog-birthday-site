@@ -32,6 +32,7 @@
         radial-gradient(1200px 700px at 20% 0%, rgba(176,138,75,.14), transparent 58%),
         radial-gradient(900px 650px at 80% 10%, rgba(214,181,122,.14), transparent 58%),
         linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
     }
     a{color:inherit;text-decoration:none}
     .wrap{max-width:980px;margin:0 auto;padding:22px 18px 40px}
@@ -52,10 +53,48 @@
       pointer-events:none;
     }
 
+    /* ===== 떠다니는 장식(꽃/풍선) ===== */
+    .floatLayer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:3;
+    }
+    .float{
+      position:absolute;
+      bottom:-18%;
+      opacity:.85;
+      filter: drop-shadow(0 10px 22px rgba(0,0,0,.12));
+      animation: rise linear infinite;
+      transform: translateZ(0);
+      will-change: transform, opacity;
+    }
+    .float .emoji{
+      display:block;
+      font-size: 28px;
+      transform-origin:center;
+      animation: sway ease-in-out infinite;
+    }
+    .float.small .emoji{font-size:22px}
+    .float.big .emoji{font-size:34px}
+
+    @keyframes rise{
+      0%{ transform: translate3d(var(--x,0px), 0, 0) rotate(var(--r,0deg)); opacity:0 }
+      8%{ opacity:.92 }
+      85%{ opacity:.92 }
+      100%{ transform: translate3d(calc(var(--x,0px) + var(--drift, 40px)), -135vh, 0) rotate(calc(var(--r,0deg) + 12deg)); opacity:0 }
+    }
+    @keyframes sway{
+      0%,100%{ transform: translateX(0) rotate(-2deg) }
+      50%{ transform: translateX(10px) rotate(2deg) }
+    }
+
     .hero{
       padding:34px 22px 16px;
       text-align:center;
       position:relative;
+      z-index:2;
     }
     .topline{
       display:flex;
@@ -109,6 +148,7 @@
       flex-wrap:wrap;
       padding:0 18px 16px;
       position:relative;
+      z-index:2;
     }
     .pill{
       display:inline-flex;
@@ -149,6 +189,7 @@
       padding:18px 18px 20px;
       border-top: 1px solid rgba(43,42,40,.10);
       position:relative;
+      z-index:2;
     }
     .secHead{
       display:flex;
@@ -235,6 +276,7 @@
       justify-content:center;
       font-size:18px;
       transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+      z-index:4;
     }
     .navBtn:hover{
       transform: translateY(-50%) scale(1.04);
@@ -387,7 +429,9 @@
 
 <body>
   <div class="wrap">
-    <div class="card">
+    <div class="card" id="card">
+      <div class="floatLayer" id="floatLayer" aria-hidden="true"></div>
+
       <div class="hero">
         <div class="topline">INVITATION</div>
         <div class="seal">YE</div>
@@ -401,7 +445,6 @@
       <div class="ribbon">
         <span class="pill" id="apiPill">API: 연결 확인 중</span>
         <button class="btn" id="btnReload" type="button">방명록 새로고침</button>
-        <a class="btn btnPrimary" href="./admin.html">관리자</a>
       </div>
 
       <div class="section">
@@ -560,10 +603,73 @@
       if(img) img.src = "";
     }
 
+    /* ===== 떠다니는 꽃/풍선 애니메이션 ===== */
+    const Floats = {
+      layer: null,
+      running: true,
+      pool: ["🎈","🎈","🎈","🌸","🌼","🌷","✨","🎉"],
+      tick: null,
+
+      init(){
+        this.layer = $("floatLayer");
+        if(!this.layer) return;
+        this.spawnBatch(14);
+        this.tick = setInterval(() => this.spawnOne(), 1200);
+
+        document.addEventListener("visibilitychange", () => {
+          this.running = !document.hidden;
+        });
+      },
+
+      rand(a,b){ return a + Math.random()*(b-a); },
+      pick(){ return this.pool[Math.floor(Math.random()*this.pool.length)]; },
+
+      spawnBatch(n){
+        for(let i=0;i<n;i++){
+          setTimeout(() => this.spawnOne(true), i*140);
+        }
+      },
+
+      spawnOne(isInit=false){
+        if(!this.layer || !this.running) return;
+
+        const el = document.createElement("div");
+        const sizeRoll = Math.random();
+        const cls = sizeRoll < 0.25 ? "float small" : (sizeRoll > 0.85 ? "float big" : "float");
+
+        el.className = cls;
+        const emoji = document.createElement("span");
+        emoji.className = "emoji";
+        emoji.textContent = this.pick();
+        el.appendChild(emoji);
+
+        const left = this.rand(2, 98);
+        const dur = this.rand(10, 18);
+        const delay = isInit ? this.rand(0, 2.2) : this.rand(0, 1.2);
+        const drift = this.rand(-70, 90);
+        const x = this.rand(-20, 20);
+        const r = this.rand(-8, 8);
+        const swayDur = this.rand(2.4, 4.4);
+
+        el.style.left = left + "%";
+        el.style.animationDuration = dur + "s";
+        el.style.animationDelay = delay + "s";
+        el.style.setProperty("--drift", drift + "px");
+        el.style.setProperty("--x", x + "px");
+        el.style.setProperty("--r", r + "deg");
+        emoji.style.animationDuration = swayDur + "s";
+        emoji.style.animationDelay = this.rand(0, 1.4) + "s";
+
+        this.layer.appendChild(el);
+
+        const killAfter = (dur + delay + 1) * 1000;
+        setTimeout(() => { el.remove(); }, killAfter);
+      }
+    };
+
     /* ===== 슬라이더 ===== */
     const Slider = {
       idx: 0,
-      ready: false,
       front: "A",
       timer: null,
       playing: false,
@@ -777,6 +883,7 @@
     $("modal")?.addEventListener("click", (e) => { if(e.target === $("modal")) closeModal(); });
 
     checkApi();
+    Floats.init();
     Slider.init();
     loadGuestbook();
   </script>

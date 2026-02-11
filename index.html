@@ -2,683 +2,513 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>강아지 생일 파티 | 방명록</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>연유 생일파티 방명록</title>
   <style>
     :root{
-      --bg:#070a12;
-      --panel:#0b1220;
-      --panel2:#0f172a;
-      --line:#1f2937;
-      --text:#e5e7eb;
-      --muted:#94a3b8;
-      --brand:#22d3ee;
-      --brand2:#a78bfa;
+      --bg:#0b0f17;
+      --panel:#121a2a;
+      --line:rgba(255,255,255,.12);
+      --txt:#eaf0ff;
+      --muted:rgba(234,240,255,.72);
+      --accent:#6ee7ff;
+      --accent2:#a78bfa;
     }
-    html,body{height:100%;}
+    html,body{height:100%}
     body{
-      background:
-        radial-gradient(900px 480px at 15% 0%, rgba(34,211,238,.10), transparent 60%),
-        radial-gradient(900px 480px at 85% 0%, rgba(167,139,250,.10), transparent 55%),
-        var(--bg);
-      color:var(--text);
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Noto Sans KR,Apple SD Gothic Neo,Helvetica,Arial,sans-serif;
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(110,231,255,.20), transparent 55%),
+                  radial-gradient(900px 700px at 80% 0%, rgba(167,139,250,.18), transparent 50%),
+                  var(--bg);
+      color:var(--txt);
+    }
+    a{color:inherit}
+    .wrap{max-width:1080px;margin:0 auto;padding:20px}
+    .top{
+      display:flex;gap:14px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;
+      padding:18px 18px;border:1px solid var(--line);border-radius:18px;
+      background: linear-gradient(180deg, rgba(18,26,42,.86), rgba(18,26,42,.60));
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+    }
+    .title h1{margin:0;font-size:22px;letter-spacing:-.2px}
+    .title .sub{margin-top:6px;color:var(--muted);font-size:13px}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(0,0,0,.18);color:var(--muted);font-size:12px
+    }
+    .grid{
+      margin-top:14px;
+      display:grid;grid-template-columns: 1.4fr .6fr;gap:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
     }
     .card{
-      background: rgba(11,18,32,.78);
-      border: 1px solid rgba(31,41,55,.85);
-      backdrop-filter: blur(10px);
+      border:1px solid var(--line);border-radius:18px;
+      background: linear-gradient(180deg, rgba(18,26,42,.78), rgba(18,26,42,.52));
+      box-shadow: 0 18px 60px rgba(0,0,0,.30);
+      overflow:hidden;
     }
-    .chip{
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(148,163,184,.20);
+    .card .hd{
+      padding:14px 16px;border-bottom:1px solid var(--line);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap
     }
-    .input{
-      background: rgba(2,6,23,.40);
-      border: 1px solid rgba(31,41,55,.95);
-      color: var(--text);
+    .card .hd .h{font-weight:700}
+    .card .bd{padding:14px 16px}
+    .gallery{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
     }
+    @media (max-width: 680px){
+      .gallery{grid-template-columns:repeat(2,1fr)}
+    }
+    .ph{
+      position:relative;aspect-ratio: 4/3;
+      border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.22);
+      cursor:pointer;
+    }
+    .ph img{
+      width:100%;height:100%;object-fit:cover;display:block;
+      transform:scale(1.02);
+      transition:transform .25s ease;
+    }
+    .ph:hover img{transform:scale(1.07)}
     .btn{
-      background: linear-gradient(135deg, var(--brand), var(--brand2));
-      color:#071018;
-      font-weight: 800;
+      appearance:none;border:none;cursor:pointer;
+      padding:10px 12px;border-radius:12px;
+      color:#081018;font-weight:700;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
     }
+    .btn:disabled{opacity:.55;cursor:not-allowed}
     .btn2{
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(148,163,184,.20);
-      color: var(--text);
-      font-weight: 800;
+      appearance:none;border:1px solid var(--line);cursor:pointer;
+      padding:9px 12px;border-radius:12px;
+      background:rgba(0,0,0,.18);color:var(--txt);font-weight:600;
     }
-    .btn2:hover{background: rgba(255,255,255,.08);}
-    .btn:hover{filter:brightness(1.05);}
-    .toast{
-      position: fixed;
-      right: 14px;
-      bottom: 14px;
-      z-index: 9999;
-      min-width: 260px;
-      max-width: 380px;
-      background: rgba(11,18,32,.90);
-      border: 1px solid rgba(31,41,55,.85);
-      backdrop-filter: blur(10px);
-      transform: translateY(10px);
-      opacity: 0;
-      pointer-events: none;
-      transition: all .18s ease;
-    }
-    .toast.show{
-      transform: translateY(0);
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .gridAuto{
-      display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 12px;
-    }
-    .media{
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid rgba(31,41,55,.85);
-      background: rgba(2,6,23,.35);
-    }
-    .media img{
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+    .field label{font-size:12px;color:var(--muted)}
+    input,textarea{
       width:100%;
-      height: 180px;
-      object-fit: cover;
-      display:block;
+      background:rgba(0,0,0,.20);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--txt);
+      border-radius:12px;
+      padding:10px 11px;
+      outline:none;
     }
-    .media video{
-      width:100%;
-      height: 240px;
-      object-fit: cover;
-      display:block;
-      background:#000;
+    textarea{min-height:90px;resize:vertical}
+    .msg{font-size:13px;color:var(--muted)}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .item{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;padding:12px 12px;background:rgba(0,0,0,.18);
     }
-    .divider{
-      height:1px;
-      background: linear-gradient(90deg, transparent, rgba(148,163,184,.22), transparent);
+    .item .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .item .name{font-weight:800}
+    .item .ts{color:var(--muted);font-size:12px}
+    .item .txt{margin-top:8px;white-space:pre-wrap;line-height:1.45}
+    .modal{
+      position:fixed;inset:0;background:rgba(0,0,0,.75);
+      display:none;align-items:center;justify-content:center;z-index:50;
+      padding:18px;
     }
-    a.link{ text-decoration: underline; color: rgba(229,231,235,.92); }
-    a.link:hover{ color:#fff; }
+    .modal.on{display:flex}
+    .modal .box{
+      width:min(980px, 100%);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:18px;
+      background:rgba(10,14,22,.90);
+      overflow:hidden;
+    }
+    .modal .bar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12);
+    }
+    .modal .bar .t{font-weight:800}
+    .modal .bar .x{border:none;background:transparent;color:var(--txt);font-size:22px;cursor:pointer}
+    .modal .content{padding:0}
+    .modal img{width:100%;height:auto;display:block}
+    .footnote{margin-top:10px;color:var(--muted);font-size:12px}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.18);color:var(--muted);font-size:12px
+    }
+    .warn{color:#ffd29b}
   </style>
 </head>
-
-<body class="min-h-screen">
-  <header class="sticky top-0 z-40">
-    <div class="card">
-      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-violet-400 flex items-center justify-center text-black font-extrabold">
-          HB
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="title">
+        <h1>연유 생일파티 방명록</h1>
+        <div class="sub">
+          탄생: 2016-02-14 · 축하 메시지를 남기고, 참여 여부도 알려주세요
         </div>
-        <div class="leading-tight">
-          <div class="text-xs text-slate-300">Happy Birthday Guestbook</div>
-          <div id="hdrTitle" class="text-sm font-extrabold text-white">강아지 생일 파티</div>
-        </div>
-        <div class="ml-auto flex items-center gap-2">
-          <a href="#party" class="hidden sm:inline-flex px-3 py-2 rounded-lg text-sm text-slate-200 hover:bg-white/5">일정</a>
-          <a href="#gallery" class="hidden sm:inline-flex px-3 py-2 rounded-lg text-sm text-slate-200 hover:bg-white/5">갤러리</a>
-          <a href="#guestbook" class="hidden sm:inline-flex px-3 py-2 rounded-lg text-sm text-slate-200 hover:bg-white/5">방명록</a>
-          <a href="#rsvp" class="hidden sm:inline-flex px-3 py-2 rounded-lg text-sm text-slate-200 hover:bg-white/5">참여</a>
-          <button id="btnAdmin" class="btn2 px-3 py-2 rounded-lg text-sm">관리자</button>
-        </div>
+      </div>
+      <div class="row">
+        <span class="pill" id="apiPill">API: 연결 확인 중</span>
+        <a class="btn2" href="./admin.html">관리자</a>
       </div>
     </div>
-  </header>
 
-  <main class="max-w-6xl mx-auto px-4 py-6">
-    <section class="card rounded-3xl p-6 sm:p-8 overflow-hidden">
-      <div class="flex flex-col lg:flex-row gap-6 items-start lg:items-center">
-        <div class="flex-1">
-          <div class="flex flex-wrap gap-2 items-center">
-            <span id="chipDog" class="chip px-3 py-1.5 rounded-full text-xs text-slate-200"></span>
-            <span id="chipAge" class="chip px-3 py-1.5 rounded-full text-xs text-slate-200"></span>
-            <span id="chipDday" class="chip px-3 py-1.5 rounded-full text-xs text-slate-200"></span>
+    <div class="grid">
+      <section class="card">
+        <div class="hd">
+          <div class="h">사진 갤러리</div>
+          <div class="badge" id="galleryInfo">이미지 로딩 중</div>
+        </div>
+        <div class="bd">
+          <div class="msg">현재 저장소 루트에 업로드된 이미지도 자동 인식하도록 구성되어 있습니다.</div>
+          <div style="height:10px"></div>
+          <div class="gallery" id="gallery"></div>
+          <div class="footnote" id="galleryNote"></div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="hd">
+          <div class="h">파티 참여 신청</div>
+        </div>
+        <div class="bd">
+          <div class="field">
+            <label>이름</label>
+            <input id="joinName" placeholder="예: 홍길동" />
           </div>
-          <h1 id="heroTitle" class="mt-4 text-2xl sm:text-4xl font-extrabold tracking-tight">
-            생일 축하 한마디 남겨주세요
-          </h1>
-          <p id="heroSub" class="mt-3 text-sm sm:text-base text-slate-300 leading-relaxed">
-            사진/영상 구경하고, 방명록과 참여 신청을 남길 수 있어요.
-          </p>
-
-          <div class="mt-5 flex flex-wrap gap-2">
-            <a href="#guestbook" class="btn px-5 py-3 rounded-xl text-sm">방명록 남기기</a>
-            <a href="#rsvp" class="btn2 px-5 py-3 rounded-xl text-sm">참여 신청</a>
-          </div>
-        </div>
-
-        <div class="w-full lg:w-[360px] card rounded-3xl p-5">
-          <div class="text-sm font-extrabold text-white">파티 일정 요약</div>
-          <div class="mt-3 space-y-2 text-sm text-slate-200">
-            <div class="flex items-center justify-between gap-3"><span class="text-slate-400">날짜</span><span id="pDate"></span></div>
-            <div class="flex items-center justify-between gap-3"><span class="text-slate-400">시간</span><span id="pTime"></span></div>
-            <div class="flex items-center justify-between gap-3"><span class="text-slate-400">장소</span><span id="pLoc"></span></div>
-          </div>
-          <div class="mt-4 divider"></div>
-          <div id="pNote" class="mt-4 text-xs text-slate-300 leading-relaxed"></div>
-          <div class="mt-4 flex gap-2">
-            <button id="btnCopy" class="btn2 px-4 py-2 rounded-lg text-sm">일정 복사</button>
-            <a href="#party" class="btn2 px-4 py-2 rounded-lg text-sm">상세</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="party" class="mt-6 card rounded-3xl p-6 sm:p-8">
-      <div class="text-xs text-slate-400">Party</div>
-      <div class="mt-1 text-xl sm:text-2xl font-extrabold text-white">참여 일정 안내</div>
-      <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div class="card rounded-2xl p-5">
-          <div class="text-sm font-extrabold text-white">언제</div>
-          <div class="mt-2 text-sm text-slate-200"><span id="partyWhen"></span></div>
-          <div class="mt-2 text-xs text-slate-400">변경 시 이 페이지에서 공지됩니다.</div>
-        </div>
-        <div class="card rounded-2xl p-5">
-          <div class="text-sm font-extrabold text-white">어디서</div>
-          <div class="mt-2 text-sm text-slate-200"><span id="partyWhere"></span></div>
-          <div class="mt-2 text-xs text-slate-400">정확한 상세 안내는 주최자 확인 후 공유</div>
-        </div>
-        <div class="card rounded-2xl p-5">
-          <div class="text-sm font-extrabold text-white">준비물/메모</div>
-          <div class="mt-2 text-sm text-slate-200 leading-relaxed" id="partyMemo"></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="gallery" class="mt-6 card rounded-3xl p-6 sm:p-8">
-      <div class="flex items-end justify-between gap-3">
-        <div>
-          <div class="text-xs text-slate-400">Gallery</div>
-          <div class="mt-1 text-xl sm:text-2xl font-extrabold text-white">사진 / 동영상</div>
-        </div>
-        <div class="text-xs text-slate-400">
-          파일은 /image, /video 폴더에 두고 manifest.json에 목록만 추가하면 됩니다.
-        </div>
-      </div>
-
-      <div class="mt-5">
-        <div class="text-sm font-extrabold text-white">사진</div>
-        <div id="imgGrid" class="mt-3 gridAuto"></div>
-      </div>
-
-      <div class="mt-8">
-        <div class="text-sm font-extrabold text-white">동영상</div>
-        <div id="vidGrid" class="mt-3 gridAuto"></div>
-      </div>
-    </section>
-
-    <section id="guestbook" class="mt-6 card rounded-3xl p-6 sm:p-8">
-      <div class="flex items-end justify-between gap-3">
-        <div>
-          <div class="text-xs text-slate-400">Guestbook</div>
-          <div class="mt-1 text-xl sm:text-2xl font-extrabold text-white">방명록</div>
-        </div>
-        <div class="text-xs text-slate-400">
-          관리자 삭제는 관리자 모드에서만 활성화됩니다.
-        </div>
-      </div>
-
-      <div class="mt-5 grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div class="card rounded-2xl p-5">
-          <div class="text-sm font-extrabold text-white">축하 메시지 남기기</div>
-          <div class="mt-4 space-y-3">
-            <div>
-              <label class="text-xs text-slate-300">이름(또는 닉네임)</label>
-              <input id="gbName" class="mt-2 w-full input rounded-xl px-3 py-3 outline-none" placeholder="예: 홍길동" />
+          <div class="field">
+            <label>참여 여부</label>
+            <div class="row">
+              <button class="btn2" data-join="yes" type="button">참여</button>
+              <button class="btn2" data-join="no" type="button">불참</button>
+              <button class="btn2" data-join="maybe" type="button">미정</button>
             </div>
-            <div>
-              <label class="text-xs text-slate-300">메시지</label>
-              <textarea id="gbMsg" rows="4" class="mt-2 w-full input rounded-xl px-3 py-3 outline-none" placeholder="생일 축하해! 오래오래 건강하자"></textarea>
-            </div>
-            <button id="btnGbSubmit" class="btn w-full px-5 py-3 rounded-xl text-sm">등록</button>
-            <div id="gbStatus" class="text-xs text-slate-400"></div>
+            <input id="joinStatus" placeholder="버튼을 눌러 선택" readonly />
           </div>
+          <div class="field">
+            <label>메모</label>
+            <input id="joinMemo" placeholder="예: 2명 참석 / 선물 준비했어요" />
+          </div>
+          <div class="row">
+            <button class="btn" id="btnJoin" type="button">신청 저장</button>
+          </div>
+          <div class="footnote warn" id="joinMsg"></div>
         </div>
+      </aside>
 
-        <div class="lg:col-span-2 card rounded-2xl p-5">
-          <div class="flex items-center justify-between">
-            <div class="text-sm font-extrabold text-white">최근 글</div>
-            <button id="btnGbReload" class="btn2 px-4 py-2 rounded-lg text-sm">새로고침</button>
+      <section class="card" style="grid-column: 1 / -1;">
+        <div class="hd">
+          <div class="h">방명록</div>
+          <div class="row">
+            <button class="btn2" id="btnReload" type="button">새로고침</button>
           </div>
-          <div id="gbList" class="mt-4 space-y-3"></div>
         </div>
-      </div>
-    </section>
+        <div class="bd">
+          <div class="field">
+            <label>이름</label>
+            <input id="gName" placeholder="예: 유선" />
+          </div>
+          <div class="field">
+            <label>축하 메시지</label>
+            <textarea id="gMsg" placeholder="연유 생일 축하해요!"></textarea>
+          </div>
+          <div class="row">
+            <button class="btn" id="btnPost" type="button">등록</button>
+          </div>
+          <div class="footnote warn" id="postMsg"></div>
 
-    <section id="rsvp" class="mt-6 card rounded-3xl p-6 sm:p-8">
-      <div class="flex items-end justify-between gap-3">
-        <div>
-          <div class="text-xs text-slate-400">RSVP</div>
-          <div class="mt-1 text-xl sm:text-2xl font-extrabold text-white">참여 신청</div>
+          <div style="height:12px"></div>
+          <div class="list" id="list"></div>
         </div>
-        <div class="text-xs text-slate-400">
-          주최자가 확인 후 연락드립니다.
-        </div>
-      </div>
-
-      <div class="mt-5 grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div class="card rounded-2xl p-5">
-          <div class="text-sm font-extrabold text-white">신청서</div>
-          <div class="mt-4 space-y-3">
-            <div>
-              <label class="text-xs text-slate-300">이름</label>
-              <input id="rvName" class="mt-2 w-full input rounded-xl px-3 py-3 outline-none" placeholder="예: 홍길동" />
-            </div>
-            <div>
-              <label class="text-xs text-slate-300">연락처(전화/카톡ID/이메일)</label>
-              <input id="rvContact" class="mt-2 w-full input rounded-xl px-3 py-3 outline-none" placeholder="예: 010-0000-0000 / kakaoid" />
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="text-xs text-slate-300">참석 여부</label>
-                <select id="rvAttend" class="mt-2 w-full input rounded-xl px-3 py-3 outline-none">
-                  <option value="yes">참석</option>
-                  <option value="maybe">미정</option>
-                  <option value="no">불참</option>
-                </select>
-              </div>
-              <div>
-                <label class="text-xs text-slate-300">인원</label>
-                <input id="rvPeople" type="number" min="1" max="20" value="1" class="mt-2 w-full input rounded-xl px-3 py-3 outline-none" />
-              </div>
-            </div>
-            <div>
-              <label class="text-xs text-slate-300">메모(선택)</label>
-              <input id="rvMemo" class="mt-2 w-full input rounded-xl px-3 py-3 outline-none" placeholder="예: 늦게 도착, 간식 준비 등" />
-            </div>
-            <button id="btnRvSubmit" class="btn w-full px-5 py-3 rounded-xl text-sm">신청 제출</button>
-            <div id="rvStatus" class="text-xs text-slate-400"></div>
-          </div>
-        </div>
-
-        <div class="lg:col-span-2 card rounded-2xl p-5">
-          <div class="flex items-center justify-between">
-            <div class="text-sm font-extrabold text-white">공지</div>
-          </div>
-          <div class="mt-4 text-sm text-slate-200 leading-relaxed">
-            ▪ 참여 신청은 개인정보 보호를 위해 공개 목록으로 보여주지 않습니다.<br>
-            ▪ 관리자 페이지에서만 신청 목록을 확인할 수 있습니다.<br>
-            ▪ 당일 변동 가능성이 있다면 미정으로 신청 후 메모 남기면 됩니다.
-          </div>
-          <div class="mt-5 divider"></div>
-          <div class="mt-5 text-xs text-slate-400">
-            관리자 페이지: <a class="link" href="./admin.html">admin.html</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <div id="adminModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/70"></div>
-    <div class="relative card rounded-2xl p-5 w-full max-w-md">
-      <div class="text-sm font-extrabold text-white">관리자 모드</div>
-      <div class="mt-2 text-xs text-slate-400">
-        삭제 권한은 비밀번호로 보호됩니다.
-      </div>
-      <div class="mt-4 space-y-3">
-        <div>
-          <label class="text-xs text-slate-300">관리자 비밀번호</label>
-          <input id="adminPass" type="password" class="mt-2 w-full input rounded-xl px-3 py-3 outline-none" placeholder="0718" />
-        </div>
-        <div class="flex gap-2">
-          <button id="btnAdminLogin" class="btn flex-1 px-5 py-3 rounded-xl text-sm">로그인</button>
-          <button id="btnAdminClose" class="btn2 px-5 py-3 rounded-xl text-sm">닫기</button>
-        </div>
-        <div id="adminStatus" class="text-xs text-slate-400"></div>
-      </div>
+      </section>
     </div>
   </div>
 
-  <div id="toast" class="toast rounded-2xl p-4">
-    <div class="text-sm font-extrabold text-white" id="toastTitle">알림</div>
-    <div class="mt-1 text-xs text-slate-300" id="toastMsg"></div>
+  <div class="modal" id="modal">
+    <div class="box">
+      <div class="bar">
+        <div class="t" id="modalTitle">사진</div>
+        <button class="x" id="modalClose" aria-label="닫기">×</button>
+      </div>
+      <div class="content">
+        <img id="modalImg" alt="preview" />
+      </div>
+    </div>
   </div>
 
   <script>
-    const API_BASE_URL = https://dog-birthday-api.onrender.com/;
-    const ADMIN_PASSWORD = "0718";
+    // ===== 설정: Render 백엔드 =====
+    const API_BASE_URL = "https://dog-birthday-api.onrender.com";
+
+    // ===== 현재 업로드 상태(루트에 이미지가 흩어져 있어도 동작하도록 폴백) =====
+    const FALLBACK_IMAGES = [
+      "KakaoTalk_20260211_133239688.jpg",
+      "KakaoTalk_20260211_133239688_01.jpg",
+      "KakaoTalk_20260211_133239688_02.jpg",
+      "KakaoTalk_20260211_133239688_03.jpg",
+      "KakaoTalk_20260211_133239688_04.jpg",
+      "KakaoTalk_20260211_133239688_05.jpg",
+      "KakaoTalk_20260211_133239688_06.jpg",
+      "KakaoTalk_20260211_133239688_07.png",
+      "KakaoTalk_20260211_133239688_08.jpg",
+      "KakaoTalk_20260211_133239688_09.jpg",
+    ];
 
     const $ = (id) => document.getElementById(id);
 
-    function showToast(title, msg){
-      $("toastTitle").textContent = title || "알림";
-      $("toastMsg").textContent = msg || "";
-      $("toast").classList.add("show");
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(()=> $("toast").classList.remove("show"), 2400);
+    function setPill(ok){
+      const el = $("apiPill");
+      if(ok){
+        el.textContent = "API: 연결됨";
+        el.style.borderColor = "rgba(110,231,255,.45)";
+        el.style.color = "rgba(234,240,255,.90)";
+      } else {
+        el.textContent = "API: 연결 실패";
+        el.style.borderColor = "rgba(255,210,155,.45)";
+        el.style.color = "rgba(255,210,155,.90)";
+      }
     }
 
-    function clean(s){ return String(s || "").trim(); }
-
-    function kstNow(){
-      const d = new Date();
-      const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-      return new Date(utc + (9 * 3600000));
+    async function api(path, opts={}){
+      const url = API_BASE_URL.replace(/\/+$/,"") + path;
+      const r = await fetch(url, {
+        headers: { "Content-Type":"application/json", ...(opts.headers||{}) },
+        ...opts
+      });
+      if(!r.ok){
+        const t = await r.text().catch(()=> "");
+        throw new Error(`${r.status} ${r.statusText} ${t}`.trim());
+      }
+      const ct = r.headers.get("content-type") || "";
+      return ct.includes("application/json") ? r.json() : r.text();
     }
 
-    function parseYMD(ymd){
-      const [y,m,dd] = String(ymd).split("-").map(v=>parseInt(v,10));
-      return {y, m, d: dd};
+    function fmt(ts){
+      try{
+        const d = new Date(ts);
+        if(Number.isNaN(d.getTime())) return String(ts||"");
+        const y = d.getFullYear();
+        const m = String(d.getMonth()+1).padStart(2,"0");
+        const da = String(d.getDate()).padStart(2,"0");
+        const hh = String(d.getHours()).padStart(2,"0");
+        const mm = String(d.getMinutes()).padStart(2,"0");
+        return `${y}-${m}-${da} ${hh}:${mm}`;
+      }catch(e){ return String(ts||""); }
     }
 
-    function calcKoreanAge(birthYMD){
-      const now = kstNow();
-      const by = parseYMD(birthYMD).y;
-      return (now.getFullYear() - by + 1);
+    function pickManifestImages(manifest){
+      if(!manifest || typeof manifest !== "object") return null;
+      if(Array.isArray(manifest.images)) return manifest.images;
+      if(Array.isArray(manifest.gallery)) return manifest.gallery;
+      if(manifest.assets && Array.isArray(manifest.assets.images)) return manifest.assets.images;
+      return null;
     }
 
-    function calcFullAgeAt(dateYMD, birthYMD){
-      const dt = parseYMD(dateYMD);
-      const bt = parseYMD(birthYMD);
-      let age = dt.y - bt.y;
-      if (dt.m < bt.m || (dt.m === bt.m && dt.d < bt.d)) age -= 1;
-      return age;
+    async function exists(url){
+      try{
+        const r = await fetch(url, { method:"HEAD", cache:"no-store" });
+        return r.ok;
+      }catch(e){
+        return false;
+      }
     }
 
-    function calcDDay(targetYMD){
-      const n = kstNow();
-      const t = parseYMD(targetYMD);
-      const target = new Date(Date.UTC(t.y, t.m - 1, t.d, 0, 0, 0));
-      const nowUTC = new Date(n.getTime() - (9 * 3600000));
-      const diff = target.getTime() - nowUTC.getTime();
-      const days = Math.floor(diff / 86400000);
-      if (days > 0) return "D-" + days;
-      if (days === 0) return "D-DAY";
-      return "D+" + Math.abs(days);
+    async function resolveImageSrc(p){
+      const s = String(p||"").trim();
+      if(!s) return null;
+
+      // 절대/상대 경로 모두 처리
+      const candidates = [];
+
+      // manifest에 image/가 붙어 있든 없든 둘 다 시도
+      if(s.startsWith("image/") || s.startsWith("./image/")){
+        const bare = s.replace(/^\.?\/*image\//, "");
+        candidates.push(`image/${bare}`);
+        candidates.push(bare);
+      } else {
+        candidates.push(`image/${s}`);
+        candidates.push(s);
+      }
+
+      // 실제로 존재하는 첫 번째 경로를 선택
+      for(const c of candidates){
+        const u = new URL(c, location.href).toString();
+        if(await exists(u)) return c;
+      }
+      return null;
     }
 
-    function fmtPartyText(manifest){
-      const p = manifest.party;
-      return `${p.title}
-일시: ${p.date} ${p.time}
-장소: ${p.location}
-메모: ${p.note}`;
+    async function loadGallery(){
+      let manifest = null;
+      try{
+        manifest = await fetch("./manifest.json", { cache:"no-store" }).then(r => r.ok ? r.json() : null);
+      }catch(e){
+        manifest = null;
+      }
+
+      let list = pickManifestImages(manifest);
+      if(!Array.isArray(list) || list.length === 0){
+        list = FALLBACK_IMAGES.slice();
+        $("galleryNote").textContent = "manifest.json의 이미지 목록을 찾지 못해, 현재 업로드된 파일명 기반 폴백 목록으로 표시 중입니다.";
+      } else {
+        $("galleryNote").textContent = "";
+      }
+
+      const resolved = [];
+      for(const p of list){
+        const src = await resolveImageSrc(p);
+        if(src) resolved.push({ src, name: String(p) });
+      }
+
+      $("galleryInfo").textContent = `표시 ${resolved.length}장`;
+      const g = $("gallery");
+      g.innerHTML = "";
+
+      if(resolved.length === 0){
+        g.innerHTML = `<div class="msg">이미지를 찾지 못했습니다. 저장소 루트에 이미지가 있는지, 파일명이 정확한지 확인하세요.</div>`;
+        return;
+      }
+
+      for(const it of resolved){
+        const d = document.createElement("div");
+        d.className = "ph";
+        const img = document.createElement("img");
+        img.loading = "lazy";
+        img.alt = it.name;
+        img.src = it.src;
+        d.appendChild(img);
+        d.addEventListener("click", () => openModal(it.src, it.name));
+        g.appendChild(d);
+      }
     }
 
-    function isAdmin(){
-      return sessionStorage.getItem("hb_admin") === "1";
+    function openModal(src, title){
+      $("modalImg").src = src;
+      $("modalTitle").textContent = title || "사진";
+      $("modal").classList.add("on");
+    }
+    function closeModal(){
+      $("modal").classList.remove("on");
+      $("modalImg").src = "";
     }
 
-    function setAdmin(flag){
-      sessionStorage.setItem("hb_admin", flag ? "1" : "0");
-    }
-
-    function adminHeader(){
-      const pass = sessionStorage.getItem("hb_admin_pass") || "";
-      return pass ? {"x-admin-pass": pass} : {};
-    }
-
-    function mountGallery(manifest){
-      const imgs = Array.isArray(manifest.images) ? manifest.images : [];
-      const vids = Array.isArray(manifest.videos) ? manifest.videos : [];
-
-      const ig = $("imgGrid");
-      ig.innerHTML = imgs.map(src => `
-        <div class="media">
-          <img src="${src}" alt="image" loading="lazy" />
-        </div>
-      `).join("");
-
-      const vg = $("vidGrid");
-      vg.innerHTML = vids.map(src => `
-        <div class="media">
-          <video src="${src}" controls preload="metadata"></video>
-        </div>
-      `).join("");
-    }
-
-    function gbItemTpl(item){
-      const delBtn = isAdmin()
-        ? `<button data-del="${item.id}" class="btn2 px-3 py-1.5 rounded-lg text-xs">삭제</button>`
-        : "";
-      return `
-        <div class="card rounded-2xl p-4">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <div class="text-sm font-extrabold text-white">${escapeHtml(item.name)}</div>
-              <div class="mt-1 text-xs text-slate-400">${escapeHtml(item.created_at)}</div>
+    async function loadGuestbook(){
+      $("postMsg").textContent = "";
+      const el = $("list");
+      el.innerHTML = `<div class="msg">불러오는 중...</div>`;
+      try{
+        const data = await api("/api/guestbook", { method:"GET" });
+        const rows = Array.isArray(data) ? data : (data.items || []);
+        if(!rows.length){
+          el.innerHTML = `<div class="msg">아직 방명록이 없습니다. 첫 글을 남겨주세요.</div>`;
+          return;
+        }
+        el.innerHTML = "";
+        for(const r of rows){
+          const d = document.createElement("div");
+          d.className = "item";
+          d.innerHTML = `
+            <div class="meta">
+              <div class="name">${escapeHtml(r.name || "익명")}</div>
+              <div class="ts">${escapeHtml(fmt(r.created_at || r.ts || ""))}</div>
             </div>
-            <div class="flex items-center gap-2">
-              ${delBtn}
-            </div>
-          </div>
-          <div class="mt-3 text-sm text-slate-200 leading-relaxed whitespace-pre-wrap">${escapeHtml(item.message)}</div>
-        </div>
-      `;
+            <div class="txt">${escapeHtml(r.message || "")}</div>
+          `;
+          el.appendChild(d);
+        }
+      }catch(e){
+        el.innerHTML = `<div class="msg warn">방명록 불러오기 실패: ${escapeHtml(String(e.message||e))}</div>`;
+      }
+    }
+
+    async function postGuestbook(){
+      $("postMsg").textContent = "";
+      const name = $("gName").value.trim();
+      const message = $("gMsg").value.trim();
+      if(!name || !message){
+        $("postMsg").textContent = "이름과 메시지를 모두 입력하세요.";
+        return;
+      }
+      $("btnPost").disabled = true;
+      try{
+        await api("/api/guestbook", {
+          method:"POST",
+          body: JSON.stringify({ name, message })
+        });
+        $("gMsg").value = "";
+        await loadGuestbook();
+      }catch(e){
+        $("postMsg").textContent = `등록 실패: ${String(e.message||e)}`;
+      } finally {
+        $("btnPost").disabled = false;
+      }
+    }
+
+    async function postJoin(){
+      $("joinMsg").textContent = "";
+      const name = $("joinName").value.trim();
+      const status = $("joinStatus").value.trim();
+      const memo = $("joinMemo").value.trim();
+      if(!name || !status){
+        $("joinMsg").textContent = "이름과 참여 여부를 입력하세요.";
+        return;
+      }
+      $("btnJoin").disabled = true;
+      try{
+        await api("/api/join", {
+          method:"POST",
+          body: JSON.stringify({ name, status, memo })
+        });
+        $("joinMemo").value = "";
+        $("joinMsg").textContent = "저장 완료";
+      }catch(e){
+        $("joinMsg").textContent = `저장 실패: ${String(e.message||e)}`;
+      } finally {
+        $("btnJoin").disabled = false;
+      }
     }
 
     function escapeHtml(s){
-      return String(s || "")
+      return String(s ?? "")
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        .replaceAll("'","&#39;");
     }
 
-    async function gbLoad(){
-      if(!API_BASE_URL || API_BASE_URL.includes("YOUR-BACKEND")){
-        $("gbList").innerHTML = `<div class="text-sm text-rose-300">index.html의 API_BASE_URL을 실제 백엔드 주소로 바꿔야 합니다.</div>`;
-        return;
-      }
-      $("gbList").innerHTML = `<div class="text-sm text-slate-300">불러오는 중...</div>`;
-      try{
-        const res = await fetch(API_BASE_URL + "/api/guestbook?limit=100");
-        const data = await res.json();
-        if(!res.ok || !data.ok) throw new Error(data.detail || ("HTTP " + res.status));
-        const items = Array.isArray(data.items) ? data.items : [];
-        if(items.length === 0){
-          $("gbList").innerHTML = `<div class="text-sm text-slate-300">첫 방명록을 남겨주세요.</div>`;
-          return;
-        }
-        $("gbList").innerHTML = items.map(gbItemTpl).join("");
-        bindGbDelete();
-      }catch(e){
-        $("gbList").innerHTML = `<div class="text-sm text-rose-300">불러오기 실패: ${escapeHtml(e.message || "unknown")}</div>`;
-      }
-    }
-
-    async function gbSubmit(){
-      if(!API_BASE_URL || API_BASE_URL.includes("YOUR-BACKEND")){
-        $("gbStatus").textContent = "index.html의 API_BASE_URL을 실제 백엔드 주소로 바꿔야 합니다.";
-        return;
-      }
-      const name = clean($("gbName").value);
-      const msg = clean($("gbMsg").value);
-      if(!name){ $("gbStatus").textContent = "이름(닉네임)을 입력해 주세요."; return; }
-      if(!msg){ $("gbStatus").textContent = "메시지를 입력해 주세요."; return; }
-
-      $("btnGbSubmit").disabled = true;
-      $("gbStatus").textContent = "등록 중...";
-      try{
-        const res = await fetch(API_BASE_URL + "/api/guestbook", {
-          method: "POST",
-          headers: {"Content-Type":"application/json"},
-          body: JSON.stringify({name, message: msg})
-        });
-        const data = await res.json();
-        if(!res.ok || !data.ok) throw new Error(data.detail || ("HTTP " + res.status));
-        $("gbName").value = "";
-        $("gbMsg").value = "";
-        $("gbStatus").textContent = "등록 완료";
-        showToast("등록 완료", "방명록이 저장되었습니다.");
-        await gbLoad();
-      }catch(e){
-        $("gbStatus").textContent = "등록 실패: " + (e.message || "unknown");
-      }finally{
-        $("btnGbSubmit").disabled = false;
-      }
-    }
-
-    function bindGbDelete(){
-      if(!isAdmin()) return;
-      document.querySelectorAll("[data-del]").forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
-          const id = btn.getAttribute("data-del");
-          await gbDelete(id);
+    function bindJoinButtons(){
+      document.querySelectorAll("[data-join]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const v = btn.getAttribute("data-join");
+          const map = { yes:"참여", no:"불참", maybe:"미정" };
+          $("joinStatus").value = map[v] || v;
         });
       });
     }
 
-    async function gbDelete(id){
-      if(!isAdmin()){
-        showToast("권한 없음", "관리자 로그인 후 삭제할 수 있습니다.");
-        return;
-      }
+    async function checkApi(){
       try{
-        const res = await fetch(API_BASE_URL + "/api/guestbook/" + encodeURIComponent(id), {
-          method: "DELETE",
-          headers: Object.assign({}, adminHeader())
-        });
-        const data = await res.json().catch(()=> ({}));
-        if(!res.ok || !data.ok) throw new Error(data.detail || ("HTTP " + res.status));
-        showToast("삭제 완료", "해당 글이 삭제되었습니다.");
-        await gbLoad();
+        const r = await fetch(API_BASE_URL.replace(/\/+$/,"") + "/health", { cache:"no-store" });
+        setPill(r.ok);
       }catch(e){
-        showToast("삭제 실패", e.message || "unknown");
+        setPill(false);
       }
     }
 
-    async function rsvpSubmit(){
-      if(!API_BASE_URL || API_BASE_URL.includes("YOUR-BACKEND")){
-        $("rvStatus").textContent = "index.html의 API_BASE_URL을 실제 백엔드 주소로 바꿔야 합니다.";
-        return;
-      }
-      const name = clean($("rvName").value);
-      const contact = clean($("rvContact").value);
-      const attend = clean($("rvAttend").value);
-      const people = parseInt($("rvPeople").value || "1", 10);
-      const memo = clean($("rvMemo").value);
+    // init
+    $("btnPost").addEventListener("click", postGuestbook);
+    $("btnReload").addEventListener("click", loadGuestbook);
+    $("btnJoin").addEventListener("click", postJoin);
+    $("modalClose").addEventListener("click", closeModal);
+    $("modal").addEventListener("click", (e) => { if(e.target === $("modal")) closeModal(); });
+    bindJoinButtons();
 
-      if(!name){ $("rvStatus").textContent = "이름을 입력해 주세요."; return; }
-      if(!contact){ $("rvStatus").textContent = "연락처를 입력해 주세요."; return; }
-      if(!Number.isFinite(people) || people < 1 || people > 20){
-        $("rvStatus").textContent = "인원은 1~20 범위로 입력해 주세요.";
-        return;
-      }
-
-      $("btnRvSubmit").disabled = true;
-      $("rvStatus").textContent = "제출 중...";
-      try{
-        const res = await fetch(API_BASE_URL + "/api/rsvp", {
-          method: "POST",
-          headers: {"Content-Type":"application/json"},
-          body: JSON.stringify({name, contact, attend, people, memo})
-        });
-        const data = await res.json();
-        if(!res.ok || !data.ok) throw new Error(data.detail || ("HTTP " + res.status));
-        $("rvName").value = "";
-        $("rvContact").value = "";
-        $("rvAttend").value = "yes";
-        $("rvPeople").value = "1";
-        $("rvMemo").value = "";
-        $("rvStatus").textContent = "제출 완료";
-        showToast("신청 완료", "참여 신청이 접수되었습니다.");
-      }catch(e){
-        $("rvStatus").textContent = "제출 실패: " + (e.message || "unknown");
-      }finally{
-        $("btnRvSubmit").disabled = false;
-      }
-    }
-
-    async function loadManifest(){
-      const res = await fetch("./manifest.json?_=" + Date.now());
-      if(!res.ok) throw new Error("manifest.json 로드 실패");
-      return await res.json();
-    }
-
-    function applyManifest(manifest){
-      const dog = manifest.dog || {};
-      const party = manifest.party || {};
-      const dogName = dog.name || "우리 강아지";
-      const birth = dog.birth || "2016-02-14";
-
-      $("hdrTitle").textContent = party.title || "강아지 생일 파티";
-      $("chipDog").textContent = `${dogName} | 탄생 ${birth}`;
-      $("chipAge").textContent = `올해 한국나이 ${calcKoreanAge(birth)}살`;
-      $("chipDday").textContent = `${party.date || "2026-02-14"} ${calcDDay(party.date || "2026-02-14")}`;
-
-      const fullAge = calcFullAgeAt(party.date || "2026-02-14", birth);
-      $("heroTitle").textContent = `${dogName}의 생일을 축하해주세요`;
-      $("heroSub").textContent = `방명록과 참여 신청을 남길 수 있어요. (${party.date || "2026-02-14"} 기준 만 ${fullAge}살)`;
-
-      $("pDate").textContent = party.date || "-";
-      $("pTime").textContent = party.time || "-";
-      $("pLoc").textContent = party.location || "-";
-      $("pNote").textContent = party.note || "";
-
-      $("partyWhen").textContent = `${party.date || "-"} ${party.time || ""}`.trim();
-      $("partyWhere").textContent = party.location || "-";
-      $("partyMemo").textContent = party.note || "-";
-
-      mountGallery(manifest);
-
-      $("btnCopy").addEventListener("click", async ()=>{
-        const text = fmtPartyText(manifest);
-        try{
-          await navigator.clipboard.writeText(text);
-          showToast("복사 완료", "일정이 클립보드에 복사되었습니다.");
-        }catch(e){
-          showToast("복사 실패", "브라우저 권한을 확인해 주세요.");
-        }
-      });
-    }
-
-    function openAdmin(){
-      $("adminModal").classList.remove("hidden");
-      $("adminModal").classList.add("flex");
-      $("adminPass").value = "";
-      $("adminStatus").textContent = isAdmin() ? "현재 관리자 모드 활성화됨" : "";
-    }
-
-    function closeAdmin(){
-      $("adminModal").classList.add("hidden");
-      $("adminModal").classList.remove("flex");
-    }
-
-    function adminLogin(){
-      const pass = clean($("adminPass").value);
-      if(pass !== ADMIN_PASSWORD){
-        $("adminStatus").textContent = "비밀번호가 일치하지 않습니다.";
-        return;
-      }
-      setAdmin(true);
-      sessionStorage.setItem("hb_admin_pass", pass);
-      $("adminStatus").textContent = "관리자 모드 활성화 완료";
-      showToast("관리자 모드", "삭제 버튼이 활성화됩니다.");
-      closeAdmin();
-      gbLoad();
-    }
-
-    $("btnAdmin").addEventListener("click", openAdmin);
-    $("btnAdminClose").addEventListener("click", closeAdmin);
-    $("btnAdminLogin").addEventListener("click", adminLogin);
-
-    $("btnGbSubmit").addEventListener("click", gbSubmit);
-    $("btnGbReload").addEventListener("click", gbLoad);
-    $("btnRvSubmit").addEventListener("click", rsvpSubmit);
-
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener("click", (e)=>{
-        const href = a.getAttribute("href");
-        const el = document.querySelector(href);
-        if(!el) return;
-        e.preventDefault();
-        el.scrollIntoView({behavior:"smooth", block:"start"});
-      });
-    });
-
-    (async ()=>{
-      try{
-        const manifest = await loadManifest();
-        applyManifest(manifest);
-        await gbLoad();
-      }catch(e){
-        showToast("초기화 실패", e.message || "unknown");
-      }
-    })();
+    checkApi();
+    loadGallery();
+    loadGuestbook();
   </script>
 </body>
 </html>
